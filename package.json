@@ -1,0 +1,14 @@
+{
+  "name": "bd_pwr",
+  "version": "1.0.0",
+  "description": "projekt na kurs bazy danych PWR",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Krzysztof Sobolewski",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
