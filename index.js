@@ -17,14 +17,8 @@ var connection = mysql.createConnection({
 connection.connect(function(err){
   if (err) throw err;
   console.log("[MySql] Connected");
-//  connection.query("CREATE DATABASE mainDB", function(err,result){
-//  var sqlQuery =  " CREATE TABLE pracownicy (name VARCHAR(30), adress VARCHAR(30))";
-  //connection.query(sqlQuery, function(err,result){
-
-//    if(err) throw err;
-//    console.log("[MySql] databas created");
-//  });
 });
+
 
 
 // Paths
