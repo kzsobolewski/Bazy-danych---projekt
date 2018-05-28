@@ -1,27 +1,52 @@
 // Modules
 const express = require('express');
 const mysql = require('mysql');
+const mySqlConfig = require('./mySqlConfig');
 const path = require('path'); // path is installed with node.js | DON'T USE 'npm i path'
 
 // Initializing express
 const app = express();
 
 // Mysql connection
-var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'bazydanych',
-  database: "mainDB"
-});
+var connection = mysql.creat
+var connection = mysql.createConnection(mySqlConfig);
+
 
 connection.connect(function(err){
   if (err) throw err;
   console.log("[MySql] Connected");
 });
 
+var article = {
+  author: 'Zenek',
+  title: 'krzyzacy',
+  body: 'foo bar'
+};
 
+/*
+var query = connection.query('insert into test set ?', article, function (err, result) {
+  if(err) {
+    console.error(err);
+    return;
+  }
+  console.error(result);
+});
+*/
+var myResult;
+
+connection.query('SELECT * FROM test', function(err,result) {
+  if (err){
+    console.error(err);
+    return;
+  }
+    myResult = result;
+} )
 
 // Paths
+
+// Settings static files (It is necessarry to link css/js/img to html files)
+app.use(express.static('public'));
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, './public/index.html'));
 });
@@ -38,10 +63,11 @@ app.get('/worker', (req, res) => {
 });
 
 
-var port = 3306 + 9;
+app.get('/worker/get', (req, res) => res.send(myResult));
+
+var port = 3306 + 10;
 app.listen(port, function() {
   console.log('SZCPP is listening on port', port);
 });
-
 // public is dir with our page (frontend)
 // everything outside is server (backend)

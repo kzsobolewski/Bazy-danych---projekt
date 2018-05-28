@@ -6,11 +6,37 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
+  <script>
+
+    var tmpString;
+    fetch('http://localhost:3316/worker/get')
+        .then(
+          function(response) {
+            return response.text();
+          }
+        ).then(function(data) {
+          tmpString = data;
+          console.log(data);
+        })
+        .catch(function(err) {
+          console.log('Fetch Error: ', err);
+        });
+
+
+    function myFunction(){
+    var div = document.getElementById('nazwa');
+    div.innerHTML = tmpString;
+  }
+  </script>
 </head>
 
 <body>
   <h1>Worker Page</h1>
   <a href="/">back</a>
+
+  <p id="nazwa" onclick="myFunction"> Default </p>
+  <button type="button" onclick="myFunction()">Try it</button>
+
 </body>
 
 </html>
