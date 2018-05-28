@@ -4,11 +4,13 @@
   "description": "projekt na kurs bazy danych PWR",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js"
   },
   "author": "Krzysztof Sobolewski",
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.3"
   }
+
+
 }

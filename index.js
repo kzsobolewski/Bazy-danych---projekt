@@ -9,16 +9,21 @@ const app = express();
 // Mysql connection
 var connection = mysql.createConnection({
   host: 'localhost',
-  user: 'admin',
-  password: 'secret',
-  database: 'myDB'
+  user: 'root',
+  password: 'bazydanych',
+  database: "mainDB"
 });
 
-connection.connect(err => {
-  if (err)
-    console.error('[MySql] ' + err);
-  else
-    console.log('[MySql] Connected');
+connection.connect(function(err){
+  if (err) throw err;
+  console.log("[MySql] Connected");
+//  connection.query("CREATE DATABASE mainDB", function(err,result){
+//  var sqlQuery =  " CREATE TABLE pracownicy (name VARCHAR(30), adress VARCHAR(30))";
+  //connection.query(sqlQuery, function(err,result){
+
+//    if(err) throw err;
+//    console.log("[MySql] databas created");
+//  });
 });
 
 
@@ -39,7 +44,7 @@ app.get('/worker', (req, res) => {
 });
 
 
-var port = 3306 + 12;
+var port = 3306 + 9;
 app.listen(port, function() {
   console.log('SZCPP is listening on port', port);
 });
