@@ -8,7 +8,6 @@ const path = require('path'); // path is installed with node.js | DON'T USE 'npm
 const app = express();
 
 // Mysql connection
-var connection = mysql.creat
 var connection = mysql.createConnection(mySqlConfig);
 
 
@@ -17,13 +16,15 @@ connection.connect(function(err){
   console.log("[MySql] Connected");
 });
 
+
+/*
 var article = {
-  author: 'Zenek',
-  title: 'krzyzacy',
+  author: 'SampleAuthor',
+  title: 'dupa',
   body: 'foo bar'
 };
 
-/*
+
 var query = connection.query('insert into test set ?', article, function (err, result) {
   if(err) {
     console.error(err);
@@ -31,7 +32,7 @@ var query = connection.query('insert into test set ?', article, function (err, r
   }
   console.error(result);
 });
-*/
+
 var myResult;
 
 connection.query('SELECT * FROM test', function(err,result) {
@@ -41,7 +42,7 @@ connection.query('SELECT * FROM test', function(err,result) {
   }
     myResult = result;
 } )
-
+*/
 // Paths
 
 // Settings static files (It is necessarry to link css/js/img to html files)
@@ -62,10 +63,19 @@ app.get('/worker', (req, res) => {
   res.sendFile(path.join(__dirname, './public/worker.html'))
 });
 
+app.get('/worker/get', (req, res) => {
+  connection.query('SELECT * FROM test', (err, result) => {
+    if(err)
+      console.log("[MySql] " + err);
+    else {
+      res.json(result);
+    }
+  });
+});
 
-app.get('/worker/get', (req, res) => res.send(myResult));
 
-var port = 3306 + 10;
+
+var port = 8000;
 app.listen(port, function() {
   console.log('SZCPP is listening on port', port);
 });
