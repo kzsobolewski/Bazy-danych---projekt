@@ -3,23 +3,23 @@ const express = require('express');
 const mysql = require('mysql');
 const path = require('path'); // path is installed with node.js | DON'T USE 'npm i path'
 
+const sqlConfig = require('./mysqlConfig');
+
 // Initializing express
 const app = express();
 
 // Mysql connection
-var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'root',
-  password: 'bazydanych',
-  database: "mainDB"
+var connection = mysql.createConnection(sqlConfig);
+
+connection.connect(function(err) {
+  if (err)
+    console.log("[MySql] " + err);
+  else
+    console.log("[MySql] Connected");
 });
 
-connection.connect(function(err){
-  if (err) throw err;
-  console.log("[MySql] Connected");
-});
-
-
+// Settings static files (It is necessarry to link css/js/img to html files)
+app.use(express.static('public'));
 
 // Paths
 app.get('/', (req, res) => {
@@ -37,8 +37,17 @@ app.get('/worker', (req, res) => {
   res.sendFile(path.join(__dirname, './public/worker.html'))
 });
 
+app.get('/worker/get', (req, res) => {
+  connection.query('SELECT * FROM test', (err, result) => {
+    if (err)
+      console.log("[MySql] " + err);
+    else {
+      res.json(result);
+    }
+  });
+})
 
-var port = 3306 + 9;
+var port = 3000;
 app.listen(port, function() {
   console.log('SZCPP is listening on port', port);
 });
