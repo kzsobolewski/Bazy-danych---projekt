@@ -93,10 +93,7 @@ export default {
   methods: {
     submit() {
       if (this.validate()) {
-        let {
-          $data
-        } = this
-        console.log($data);
+        this.addUser();
         this.reset();
       }
     },
@@ -130,6 +127,18 @@ export default {
       }
 
       return flag;
+    },
+    addUser() {
+      let {
+        errors,
+        ...data
+      } = this.$data;
+
+      this.$http.post(this.globalURL + '/worker/add', data)
+        .then(res => {})
+        .catch(err => {
+          console.log(err)
+        });
     },
     reset() {
       this.name = '';

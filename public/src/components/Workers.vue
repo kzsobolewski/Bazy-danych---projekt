@@ -32,7 +32,7 @@
               <td>Mężczyzna</td>
               <td>Programista</td>
               <td>
-                <button type="button" class="button is-info"> <fai icon="user-edit"/> </button>
+                <button type="button" class="button is-info" @click="enterEdit(1)" > <fai icon="user-edit"/> </button>
               </td>
               <td>
                 <button type="button" class="button is-danger"> <fai icon="user-times"/> </button>
@@ -93,6 +93,18 @@ export default {
       }).catch(err => {
         console.error(err);
       });
+    },
+    deleteWorker(id) {
+      this.$http.delete(this.globalURL + '/worker/delete/' + id)
+        .then(res => {
+          console.log(res.body);
+          this.getWorkers();
+        }).catch(err => {
+          console.error(err);
+        });
+    },
+    enterEdit(id) {
+      this.$emit('edit-user', id);
     }
   },
   mounted() {
