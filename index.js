@@ -3,12 +3,20 @@ const express = require('express');
 const mysql = require('mysql');
 const mySqlConfig = require('./mySqlConfig');
 const path = require('path'); // path is installed with node.js | DON'T USE 'npm i path'
+var bodyParser = require('body-parser');
 
 // Initializing express
 const app = express();
 
 // Mysql connection
 var connection = mysql.createConnection(mySqlConfig);
+
+// create application/json parser
+var jsonParser = bodyParser.json()
+
+// create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
+
 
 
 connection.connect(function(err){
@@ -17,32 +25,6 @@ connection.connect(function(err){
 });
 
 
-/*
-var article = {
-  author: 'SampleAuthor',
-  title: 'dupa',
-  body: 'foo bar'
-};
-
-
-var query = connection.query('insert into test set ?', article, function (err, result) {
-  if(err) {
-    console.error(err);
-    return;
-  }
-  console.error(result);
-});
-
-var myResult;
-
-connection.query('SELECT * FROM test', function(err,result) {
-  if (err){
-    console.error(err);
-    return;
-  }
-    myResult = result;
-} )
-*/
 // Paths
 
 // Settings static files (It is necessarry to link css/js/img to html files)
@@ -63,8 +45,32 @@ app.get('/worker', (req, res) => {
   res.sendFile(path.join(__dirname, './public/worker.html'))
 });
 
-app.get('/worker/get', (req, res) => {
-  connection.query('SELECT * FROM test', (err, result) => {
+
+//Getting list of all records in Dzialy table
+app.get('/dzialy/get', (req, res) => {
+  connection.query('SELECT * FROM Dzialy', (err, result) => {
+    if(err)
+      console.log("[MySql] " + err);
+    else {
+      res.json(result);
+    }
+  });
+});
+
+//Getting list of all records in Stanowiska table
+app.get('/stanowiska/get', (req, res) => {
+  connection.query('SELECT * FROM Stanowiska', (err, result) => {
+    if(err)
+      console.log("[MySql] " + err);
+    else {
+      res.json(result);
+    }
+  });
+});
+
+//Getting list of all records in Pracownicy table
+app.get('/pracownicy/get', (req, res) => {
+  connection.query('SELECT * FROM Pracownicy', (err, result) => {
     if(err)
       console.log("[MySql] " + err);
     else {
