@@ -11,7 +11,7 @@ INSERT INTO Stanowiska (
   dzial_id )
 VALUES (
   'Dyrektor',
-   40.00,
+   42.00,
   '8:00:00',
   '22:00:00',
    1 );
