@@ -53,21 +53,70 @@ Vue.component('workers', {
 Vue.component('add', {
   data() {
     return {
-      name: null,
-      surrname: null,
+      name: '',
+      surrname: '',
       gender: 'male',
-      job: null,
-      born: null
+      job: '',
+      born: '',
+      errors: {}
     }
   },
   methods: {
     submit() {
-      let {_data} = this
-      console.log(_data);
+      if (this.validate()) {
+        let {
+          _data
+        } = this
+        console.log(_data);
+        this.reset();
+      }
+    },
+    validate() {
+      var flag = true;
+      let {
+        errors
+      } = this;
+
+      Vue.delete(errors, 'name');
+      Vue.delete(errors, 'surrname');
+      Vue.delete(errors, 'job');
+      Vue.delete(errors, 'born');
+
+      // Validation
+      if (this.name.length == 0) {
+        flag = false;
+        Vue.set(errors, 'name', 'Proszę podać imię.');
+      }
+      if (this.surrname.length == 0) {
+        flag = false;
+        Vue.set(errors, 'surrname', 'Proszę podać nazwisko.');
+      }
+      if (this.job.length == 0) {
+        flag = false;
+        Vue.set(errors, 'job', 'Proszę podać stanowsko.');
+      }
+      if (this.born.length == 0) {
+        //  flag = false;
+        Vue.set(errors, 'born', 'Proszę podać datę urodzin.');
+      }
+      console.log(flag)
+      return flag;
+    },
+    reset() {
+      this.name = '';
+      this.surrname = '';
+      this.gender = 'male';
+      this.job = '';
+      this.born = '';
+      this.errors = {};
+      Vue.delete(this.errors, 'name');
+      Vue.delete(this.errors, 'surrname');
+      Vue.delete(this.errors, 'job');
+      Vue.delete(this.errors, 'born');
     }
   },
   template: `
-          <div class="card" v-else-if="currentTab == 'add'">
+          <div class="card">
             <header class="card-header">
               <p class="card-header-title">
                 Dodaj pracownika
@@ -84,25 +133,34 @@ Vue.component('add', {
                 <div class="field">
                   <label class="label" for="name">Imie</label>
                   <div class="control">
-                    <input id="name" class="input" type="text" placeholder="Podaj swoje imię..." v-model="name">
+                    <input id="name" class="input" :class="{'is-danger' : errors.name}" type="text" placeholder="Podaj swoje imię..." v-model="name">
                   </div>
+                  <p v-if="errors.name" class="help is-danger">
+                    {{errors.name}}
+                  </p>
                 </div>
 
                 <div class="field">
                   <label class="label" for="surrname">Nazwisko</label>
                   <div class="control">
-                    <input id="surrname" class="input" type="text" placeholder="Podaj swoję nazwisko..."  v-model="surrname">
+                    <input id="surrname" class="input" :class="{'is-danger' : errors.surrname}"  type="text" placeholder="Podaj swoję nazwisko..."  v-model="surrname">
                   </div>
+                  <p v-if="errors.surrname" class="help is-danger">
+                    {{errors.surrname}}
+                  </p>
                 </div>
 
                 <div class="field">
                   <label class="label">Stanowisko</label>
-                  <div class="select">
-                    <select  v-model="job">
+                  <div class="select" :class="{'is-danger' : errors.job}">
+                    <select v-model="job">
                       <option value="podawacz">Podawacz kawy</option>
                       <option value="Koder">Koder</option>
                     </select>
                   </div>
+                  <p v-if="errors.job" class="help is-danger">
+                    {{errors.job}}
+                  </p>
                 </div>
 
                 <div class="field">

@@ -38,13 +38,14 @@ app.get('/worker', (req, res) => {
 });
 
 app.get('/worker/get', (req, res) => {
-  connection.query('SELECT * FROM test', (err, result) => {
-    if (err)
-      console.log("[MySql] " + err);
-    else {
-      res.json(result);
-    }
-  });
+  // connection.query('SELECT * FROM test', (err, result) => {
+  //   if (err)
+  //     console.log("[MySql] " + err);
+  //   else {
+  //     res.json(result);
+  //   }
+  // });
+  res.send('test')
 })
 
 var port = 3000;
