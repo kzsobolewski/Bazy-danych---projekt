@@ -32,18 +32,12 @@
 
               <div class="navbar-dropdown is-right">
                 <a class="navbar-item">
-                      <span class="icon is-small">
-                        <i class="fa fa-user-o"></i>
-                      </span>
-                      Profile
-                    </a>
+                    Profile
+                </a>
                 <hr class="navbar-divider">
                 <a class="navbar-item">
-                      <span class="icon is-small">
-                        <i class="fa fa-power-off"></i>
-                      </span>
-                      Logout
-                    </a>
+                    Logout
+                </a>
               </div>
             </div>
           </div>
@@ -55,7 +49,7 @@
 
 <script>
 export default {
-  name: 'Nav',
+  name: 'Nav'
 }
 </script>
 

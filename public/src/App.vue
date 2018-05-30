@@ -13,9 +13,11 @@
 </template>
 
 <script>
+
 // Layout
 import Nav from './components/Nav'
 import Sidebar from './components/Sidebar.vue'
+
 // Tabs
 import stats from './components/Stats.vue'
 import add from './components/AddUser.vue'
@@ -53,5 +55,6 @@ export default {
 
 <style>
 @import './css/bulma.min.css';
+@import './css/main.css';
 @import './css/admin.css';
 </style>
