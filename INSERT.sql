@@ -351,3 +351,76 @@ VALUES (
        '2009-01-03',
        'm',
        '11' );
+
+-- ODBICIA -------------------------------------------
+INSERT INTO odbicia (
+ godzina, 
+ We_Wy, 
+ pracownik_id)
+ VALUES (
+   '2018-05-30 08:00:00', 
+   'We', 
+   '1');
+   
+     INSERT INTO odbicia (
+ godzina, 
+ We_Wy, 
+ pracownik_id)
+ VALUES (
+   '2018-05-30 15:00:00', 
+   'Wy', 
+   '1');
+   
+  INSERT INTO odbicia (
+ godzina, 
+ We_Wy, 
+ pracownik_id)
+ VALUES (
+   '2018-05-31 08:00:00', 
+   'We', 
+   '1');
+   
+   INSERT INTO odbicia (
+ godzina, 
+ We_Wy, 
+ pracownik_id)
+ VALUES (
+   '2018-05-31 17:00:00', 
+   'Wy', 
+   '1');
+   
+   INSERT INTO odbicia (
+ godzina, 
+ We_Wy, 
+ pracownik_id)
+ VALUES (
+   '2018-05-31 09:00:00', 
+   'We', 
+   '10');
+   
+   INSERT INTO odbicia (
+ godzina, 
+ We_Wy, 
+ pracownik_id)
+ VALUES (
+   '2018-05-31 16:00:00', 
+   'Wy', 
+   '10');
+   
+        INSERT INTO odbicia (
+ godzina, 
+ We_Wy, 
+ pracownik_id)
+ VALUES (
+   '2018-05-31 10:00:00', 
+   'We', 
+   '11');
+   
+     INSERT INTO odbicia (
+ godzina, 
+ We_Wy, 
+ pracownik_id)
+ VALUES (
+   '2018-05-31 17:00:00', 
+   'Wy', 
+   '11');
