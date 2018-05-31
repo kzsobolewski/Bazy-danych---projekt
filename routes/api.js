@@ -31,10 +31,10 @@ router.get('/depts/get', (req, res) => {
   connection.query('SELECT * FROM Dzialy', (err, result) => {
     if(err){
       console.log("[MySql] " + err);
-//      return res.sendStatus(404);
+      res.status(404);
     }else {
       res.json(result);
-//      return res.sendStatus(200);
+      res.status(200);
     }
   });
 });
@@ -44,10 +44,10 @@ router.get('/jobs/get', (req, res) => {
   connection.query('SELECT * FROM Stanowiska', (err, result) => {
     if(err){
       console.log("[MySql] " + err);
-  //    return res.sendStatus(404);
+      res.status(404);
     }else {
       res.json(result);
-//      return res.sendStatus(200);
+      res.status(200);
     }
   });
 });
