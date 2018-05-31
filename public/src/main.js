@@ -18,7 +18,7 @@ Vue.mixin({
   data: function() {
     return {
       get globalURL() {
-        return "http://localhost:3000";
+        return "http://localhost:8000";
       },
       get language(){
         return Polish.pl;

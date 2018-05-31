@@ -19,7 +19,7 @@ import Sidebar from './components/Sidebar.vue'
 
 // Tabs
 import stats from './components/Stats.vue'
-import add from './components/AddUser.vue'
+import workers_add from './components/AddUser.vue'
 import edit from './components/EditUser.vue'
 import workers from './components/Workers.vue'
 import payments from './components/Payments.vue'
@@ -37,7 +37,7 @@ export default {
     Nav,
     Sidebar,
     stats,
-    add,
+    workers_add,
     edit,
     payments,
     workers

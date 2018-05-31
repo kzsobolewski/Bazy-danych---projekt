@@ -161,7 +161,7 @@ export default {
       } = this.$data;
 
 
-      this.$http.post(this.globalURL + '/worker', data)
+      this.$http.post(this.globalURL + '/api/workers', data)
         .then(res => {
           if (res.status == 201) {
             this.alert = {

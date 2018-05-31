@@ -28,15 +28,15 @@
             <tr v-for="worker in workers">
               <td>{{worker.imie}}</td>
               <td>{{worker.nazwisko}}</td>
-              <td>{{worker.data_urodzenia}}</td>
+              <td>{{worker.data_urodzenia.slice(0,10)}}</td>
               <td v-if="worker.plec == 'm'">Mężczyzna</td>
                 <td v-else-if="worker.plec == 'k'">Kobieta</td>
               <td>{{worker.stanowisko_id}}</td>
               <td>
-                <button type="button" class="button is-info" @click="enterEdit(worker.id)"> <fai icon="user-edit"/> </button>
+                <button type="button" class="button is-info" @click="enterEdit(worker.pracownik_id)"> <fai icon="user-edit"/> </button>
               </td>
               <td>
-                <button type="button" class="button is-danger" @click="deleteWorker(worker.id)"> <fai icon="user-times"/> </button>
+                <button type="button" class="button is-danger" @click="deleteWorker(worker.pracownik_id)"> <fai icon="user-times"/> </button>
               </td>
             </tr>
           </tbody>
