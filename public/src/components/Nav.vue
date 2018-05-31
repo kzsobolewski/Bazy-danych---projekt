@@ -22,24 +22,6 @@
             <a class="navbar-item is-tab is-hidden-tablet" href="/">Home</a>
             <a class="navbar-item is-tab is-hidden-tablet is-active" href="/admin">Admin</a>
             <a class="navbar-item is-tab is-hidden-tablet" href="/worker">Pracownik</a>
-            <div class="navbar-item has-dropdown is-hoverable">
-              <a class="navbar-link">
-                <figure class="image is-32x32" style="margin-right:.5em;">
-                  <img src="https://avatars1.githubusercontent.com/u/7221389?v=4&s=32">
-                </figure>
-                user
-              </a>
-
-              <div class="navbar-dropdown is-right">
-                <a class="navbar-item">
-                    Profile
-                </a>
-                <hr class="navbar-divider">
-                <a class="navbar-item">
-                    Logout
-                </a>
-              </div>
-            </div>
           </div>
         </nav>
       </div>

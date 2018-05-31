@@ -31,7 +31,7 @@
               <td>{{worker.data_urodzenia}}</td>
               <td v-if="worker.plec == 'm'">Mężczyzna</td>
                 <td v-else-if="worker.plec == 'k'">Kobieta</td>
-              <td>{{worker.stanowisko}}</td>
+              <td>{{worker.stanowisko_id}}</td>
               <td>
                 <button type="button" class="button is-info" @click="enterEdit(worker.id)"> <fai icon="user-edit"/> </button>
               </td>
@@ -71,7 +71,7 @@ export default {
     getWorkers() {
       this.$http.get(this.globalURL + '/api/workers').
       then(res => {
-        this.workers = req.body;
+        this.workers = res.body;
       }).catch(err => {
         console.error(err);
       });
