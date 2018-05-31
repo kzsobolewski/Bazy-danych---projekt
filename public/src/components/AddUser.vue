@@ -14,35 +14,45 @@
     <form class="content">
 
       <div class="field">
-        <label class="label" for="name">Imie</label>
+        <label class="label" for="imie">Imie</label>
         <div class="control">
-          <input id="name" class="input" :class="{'is-danger' : errors.name}" type="text" placeholder="Podaj swoje imię..." v-model="name">
+          <input id="imie" class="input" :class="{'is-danger' : errors.imie}" type="text" placeholder="Podaj swoje imię..." v-model="imie">
         </div>
-        <p v-if="errors.name" class="help is-danger">
-          {{errors.name}}
+        <p v-if="errors.imie" class="help is-danger">
+          {{errors.imie}}
         </p>
       </div>
 
       <div class="field">
-        <label class="label" for="surrname">Nazwisko</label>
+        <label class="label" for="nazwisko">Nazwisko</label>
         <div class="control">
-          <input id="surrname" class="input" :class="{'is-danger' : errors.surrname}" type="text" placeholder="Podaj swoję nazwisko..." v-model="surrname">
+          <input id="nazwisko" class="input" :class="{'is-danger' : errors.nazwisko}" type="text" placeholder="Podaj swoję nazwisko..." v-model="nazwisko">
         </div>
-        <p v-if="errors.surrname" class="help is-danger">
-          {{errors.surrname}}
+        <p v-if="errors.nazwisko" class="help is-danger">
+          {{errors.nazwisko}}
         </p>
       </div>
 
       <div class="field">
         <label class="label">Stanowisko</label>
-        <div class="select" :class="{'is-danger' : errors.job}">
-          <select v-model="job">
+        <div class="select" :class="{'is-danger' : errors.stanowisko_id}">
+          <select v-model="stanowisko_id">
               <option value="podawacz">Podawacz kawy</option>
               <option value="Koder">Koder</option>
-            </select>
+          </select>
         </div>
-        <p v-if="errors.job" class="help is-danger">
-          {{errors.job}}
+        <p v-if="errors.stanowisko_id" class="help is-danger">
+          {{errors.stanowisko_id}}
+        </p>
+      </div>
+
+      <div class="field">
+        <label class="label">Data urodzin</label>
+        <div class="select" :class="{'is-danger' : errors.data_urodzenia}">
+          <datepicker v-model="data_urodzenia" :config="{language,altFormat: 'Y,m,d'}"></datepicker>
+        </div>
+        <p v-if="errors.data_urodzenia" class="help is-danger">
+          {{errors.data_urodzenia}}
         </p>
       </div>
 
@@ -50,11 +60,11 @@
         <label class="label">Płeć</label>
         <div class="control">
           <label class="radio">
-              <input type="radio" value="male" checked v-model="gender">
+              <input type="radio" value="m" checked v-model="plec">
               Mężczyzna
             </label>
           <label class="radio">
-              <input type="radio" value="female" v-model="gender" >
+              <input type="radio" value="f" v-model="plec" >
               Kobieta
             </label>
         </div>
@@ -78,17 +88,22 @@
 </template>
 
 <script>
+import Datepicker from 'vue-bulma-datepicker'
+
 export default {
   name: 'AddUser',
   data() {
     return {
-      name: '',
-      surrname: '',
-      gender: 'male',
-      job: '',
-      born: '',
+      imie: '',
+      nazwisko: '',
+      plec: 'male',
+      stanowisko_id: '',
+      data_urodzenia: '',
       errors: {}
     }
+  },
+  components: {
+    Datepicker
   },
   methods: {
     submit() {
@@ -103,27 +118,27 @@ export default {
         errors
       } = this;
 
-      this.$delete(errors, 'name');
-      this.$delete(errors, 'surrname');
-      this.$delete(errors, 'job');
-      this.$delete(errors, 'born');
+      this.$delete(errors, 'imie');
+      this.$delete(errors, 'nazwisko');
+      this.$delete(errors, 'stanowisko_id');
+      this.$delete(errors, 'data_urodzenia');
 
       // Validation
-      if (this.name.length == 0) {
+      if (this.imie.length == 0) {
         flag = false;
-        this.$set(errors, 'name', 'Proszę podać imię.');
+        this.$set(errors, 'imie', 'Proszę podać imię.');
       }
-      if (this.surrname.length == 0) {
+      if (this.nazwisko.length == 0) {
         flag = false;
-        this.$set(errors, 'surrname', 'Proszę podać nazwisko.');
+        this.$set(errors, 'nazwisko', 'Proszę podać nazwisko.');
       }
-      if (this.job.length == 0) {
+      if (this.stanowisko_id.length == 0) {
         flag = false;
-        this.$set(errors, 'job', 'Proszę podać stanowsko.');
+        this.$set(errors, 'stanowisko_id', 'Proszę podać stanowsko.');
       }
-      if (this.born.length == 0) {
-        //  flag = false;
-        this.$set(errors, 'born', 'Proszę podać datę urodzin.');
+      if (this.data_urodzenia.length == 0) {
+        flag = false;
+        this.$set(errors, 'data_urodzenia', 'Proszę podać datę urodzin.');
       }
 
       return flag;
@@ -131,31 +146,38 @@ export default {
     addUser() {
       let {
         errors,
+        globalURL,
+        language,
         ...data
       } = this.$data;
 
+      console.log(data)
+
       this.$http.post(this.globalURL + '/worker/add', data)
-        .then(res => {})
+        .then(res => {
+
+        })
         .catch(err => {
           console.log(err)
         });
     },
     reset() {
-      this.name = '';
-      this.surrname = '';
-      this.gender = 'male';
-      this.job = '';
-      this.born = '';
+      this.imie = '';
+      this.nazwisko = '';
+      this.plec = 'male';
+      this.stanowisko_id = '';
+      this.data_urodzenia = '';
       this.errors = {};
-      this.$delete(this.errors, 'name');
+      this.$delete(this.errors, 'imie');
       this.$delete(this.errors, 'surrname');
-      this.$delete(this.errors, 'job');
-      this.$delete(this.errors, 'born');
+      this.$delete(this.errors, 'stanowisko_id');
+      this.$delete(this.errors, 'data_urodzenia');
     }
+  },
+  created() {
+    console.log(this.language)
   }
 }
 </script>
 
-<style >
-
-</style>
+<style></style>

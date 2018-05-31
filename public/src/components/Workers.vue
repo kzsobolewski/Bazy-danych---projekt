@@ -25,43 +25,18 @@
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>John</td>
-              <td>Doe</td>
-              <td>14.02.1986</td>
-              <td>Mężczyzna</td>
-              <td>Programista</td>
+            <tr v-for="worker in workers">
+              <td>{{worker.imie}}</td>
+              <td>{{worker.nazwisko}}</td>
+              <td>{{worker.data_urodzenia}}</td>
+              <td v-if="worker.plec == 'm'">Mężczyzna</td>
+                <td v-else-if="worker.plec == 'k'">Kobieta</td>
+              <td>{{worker.stanowisko}}</td>
               <td>
-                <button type="button" class="button is-info" @click="enterEdit(1)" > <fai icon="user-edit"/> </button>
+                <button type="button" class="button is-info" @click="enterEdit(worker.id)"> <fai icon="user-edit"/> </button>
               </td>
               <td>
-                <button type="button" class="button is-danger"> <fai icon="user-times"/> </button>
-              </td>
-            </tr>
-            <tr>
-              <td>Bob</td>
-              <td>Cookie</td>
-              <td>11.03.2006</td>
-              <td>Mężczyzna</td>
-              <td>Programista</td>
-              <td>
-                <button type="button" class="button is-info"> <fai icon="user-edit"/> </button>
-              </td>
-              <td>
-                <button type="button" class="button is-danger"> <fai icon="user-times"/> </button>
-              </td>
-            </tr>
-            <tr>
-              <td>Susan</td>
-              <td>Kowalska</td>
-              <td>27.09.1906</td>
-              <td>Kobieta</td>
-              <td>Sprzątaczka</td>
-              <td>
-                <button type="button" class="button is-info"> <fai icon="user-edit"/> </button>
-              </td>
-              <td>
-                <button type="button" class="button is-danger"> <fai icon="user-times"/> </button>
+                <button type="button" class="button is-danger" @click="deleteWorker(worker.id)"> <fai icon="user-times"/> </button>
               </td>
             </tr>
           </tbody>
@@ -79,7 +54,14 @@ export default {
   name: 'Workers',
   data() {
     return {
-      workers: []
+      workers: [{
+        imie: 'Bob',
+        nazwisko: 'Cookie',
+        data_urodzenia: '1/4/2000',
+        plec: 'm',
+        pracownik_id: 1,
+        stanowisko_id: 'Programista'
+      }]
     }
   },
   components: {
@@ -87,15 +69,22 @@ export default {
   },
   methods: {
     getWorkers() {
-      this.$http.get(this.globalURL + '/worker/get').
+      this.$http.get(this.globalURL + '/api/workers').
       then(res => {
-        console.log(res.body);
+        this.workers = req.body;
       }).catch(err => {
         console.error(err);
       });
     },
+    getJobs(){
+      // let jobs = [];
+      // for(worker of workers){
+      //   jobs.push(worker.stanowisko_id);
+      // }
+      // jobs.join
+    },
     deleteWorker(id) {
-      this.$http.delete(this.globalURL + '/worker/delete/' + id)
+      this.$http.delete(this.globalURL + '/api/workers/' + id)
         .then(res => {
           console.log(res.body);
           this.getWorkers();

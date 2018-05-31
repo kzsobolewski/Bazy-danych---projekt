@@ -6,6 +6,7 @@ import VueResource from 'vue-resource'
 import fontawesome from '@fortawesome/fontawesome'
 //import brands from '@fortawesome/fontawesome-free-brands'
 import solid from '@fortawesome/fontawesome-free-solid'
+import Polish from 'flatpickr/dist/l10n/pl.js'
 
 fontawesome.library.add(solid);
 
@@ -18,6 +19,9 @@ Vue.mixin({
     return {
       get globalURL() {
         return "http://localhost:3000";
+      },
+      get language(){
+        return Polish.pl;
       }
     }
   }
