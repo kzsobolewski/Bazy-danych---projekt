@@ -9,6 +9,7 @@ CREATE TABLE Dzialy (
 CREATE TABLE Odbicia (
     odbicie_id integer PRIMARY KEY AUTO_INCREMENT,
     godzina timestamp NOT NULL,
+    data date NOT NULL,
     We_Wy varchar(2) NOT NULL,
     pracownik_id integer NOT NULL
 );
