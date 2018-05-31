@@ -27,7 +27,7 @@ connection.connect(function(err){
 /////////////////////////////////////////
 
 //Getting list of all records from dept
-router.get('/depts/get', (req, res) => {
+router.get('/depts', (req, res) => {
   connection.query('SELECT * FROM Dzialy', (err, result) => {
     if(err){
       console.log("[MySql] " + err);
@@ -40,7 +40,7 @@ router.get('/depts/get', (req, res) => {
 });
 
 //Getting list of all records in Stanowiska table
-router.get('/jobs/get', (req, res) => {
+router.get('/jobs', (req, res) => {
   connection.query('SELECT * FROM Stanowiska', (err, result) => {
     if(err){
       console.log("[MySql] " + err);
@@ -52,8 +52,21 @@ router.get('/jobs/get', (req, res) => {
   });
 });
 
+router.post('/jobs',jsonParser, (req, res) => {
+  console.log(req.body.ids.join());
+  connection.query("SELECT nazwa_stanowiska FROM Stanowiska WHERE stanowisko_id IN (?)" , req.body.ids.join(), (err, result) => {
+    if(err){
+      console.log("[MySql] " + err);
+      res.status(404);
+    }else {
+      res.json(result);
+      res.status(200);
+    }
+  });
+});
+
 //Getting list of all records in Pracownicy table
-router.get('/workers/get', (req, res) => {
+router.get('/workers', (req, res) => {
   connection.query('SELECT * FROM Pracownicy', (err, result) => {
     if(err){
       console.log("[MySql] " + err);
@@ -77,23 +90,27 @@ router.get('/workers/get', (req, res) => {
 /////////////////////////////////////////
 
 router.post('/workers/add', jsonParser,(req, res) => {
+  /*
   if (!req.body){
-  //   return res.sendStatus(204);
+     res.status(204);
+     return;
    }
+   */
+  let data = Object.assign(req.body,{data_dodania: new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + (new Date().getDate() + 1) });
   connection.query('insert into Pracownicy set ?', req.body, (err, result) => {
-    if(err) {
-      console.error("[MySql]" + err);
-//return res.sendStatus(409);
-
-    }
-    console.log("[MySql] Worker record added");
-    console.log(result);
-  //  return res.sendStatus(201);
+  if(err){
+    console.error("[MySql]" + err);
+    res.sendStatus(409);
+    return;
+  }
+  console.log("[MySql] Worker record added");
+  console.log(result);
+  res.sendStatus(201);
   });
 });
 
 
-router.post('/jobs/add', jsonParser,(req, res) => {
+router.post('/jobs', jsonParser,(req, res) => {
   if (!req.body){
   //   return res.sendStatus(204);
    }
@@ -110,7 +127,7 @@ router.post('/jobs/add', jsonParser,(req, res) => {
 });
 
 
-router.post('/depts/add', jsonParser,(req, res) => {
+router.post('/depts', jsonParser,(req, res) => {
   if (!req.body){
   //   return res.sendStatus(204);
    }
@@ -133,13 +150,39 @@ router.post('/depts/add', jsonParser,(req, res) => {
 
 /////////////////////////////////////////
 
-router.delete('/depts/delete/:id',jsonParser, (req, res) =>{
-  connection.query('DELETE FROM Dzialy WHERE dzial_id = ?', (err, result) => {
+router.delete('/depts/:id', (req, res) =>{
+  connection.query('DELETE FROM Dzialy WHERE dzial_id = ?',req.params.id , (err, result) => {
     if(err) {
       console.error("[MySql]" + err);
     }
     console.log("[MySql] Deleted");
     console.log(result);
+    res.status(200);
+  });
+});
+
+
+router.delete('/jobs/:id', (req, res) =>{
+  connection.query('DELETE FROM Pracownicy WHERE stanowisko_id = ?',req.params.id , (err, result) => {
+    if(err) {
+      console.error("[MySql]" + err);
+    }
+    console.log("[MySql] Deleted");
+    console.log(result);
+    res.status(200);
+  });
+});
+
+
+router.delete('/jobs/:id', (req, res) =>{
+  connection.query('DELETE FROM Pracownicy WHERE pracownik_id = ?',req.params.id , (err, result) => {
+    if(err) {
+      console.error("[MySql]" + err);
+
+    }
+    console.log("[MySql] Deleted");
+    console.log(result);
+    res.status(200);
   });
 });
 
