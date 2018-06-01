@@ -1,9 +1,16 @@
-// Modules
 const express = require('express');
-const path = require('path'); // path is installed with node.js | DON'T USE 'npm i path'
-
-// Initializing express
+const path = require('path');
 const app = express();
+const mysql = require('mysql');
+const mySqlConfig = require('./mySqlConfig');
+var connection = mysql.createConnection(mySqlConfig);
+
+
+
+connection.connect(function(err){
+  if (err) throw err;
+  console.log("[MySql] Connected");
+});
 
 
 // Using api router
@@ -14,9 +21,11 @@ app.use('/api', require('./routes/api') );
 // Settings static files (It is necessarry to link css/js/img to html files)
 app.use(express.static('public'));
 
+
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, './public/index.html'));
 });
+
 
 app.get('/admin', (req, res) => {
   // Rendering STATIC html file
@@ -24,6 +33,7 @@ app.get('/admin', (req, res) => {
   // (path to dir (?)) with path RELATIVE to index.js (this file)
   res.sendFile(path.join(__dirname, './public/admin.html'));
 });
+
 
 app.get('/worker', (req, res) => {
   res.sendFile(path.join(__dirname, './public/worker.html'))
@@ -34,5 +44,3 @@ app.get('/worker', (req, res) => {
 app.listen(process.env.port || 8000, function() {
   console.log('SZCPP is listening on port 8000');
 });
-// public is dir with our page (frontend)
-// everything outside is server (backend)
