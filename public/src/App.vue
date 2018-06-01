@@ -23,7 +23,9 @@ import workers_add from './components/AddUser.vue'
 import edit from './components/EditUser.vue'
 import workers from './components/Workers.vue'
 import depts from './components/Departments.vue'
+import depts_add from './components/AddDept.vue'
 import jobs from './components/Jobs.vue'
+import jobs_add from './components/AddJob.vue'
 import payments from './components/Payments.vue'
 
 export default {
@@ -40,11 +42,13 @@ export default {
     Sidebar,
     stats,
     workers_add,
+    jobs_add,
     edit,
     payments,
     workers,
     jobs,
-    depts
+    depts,
+    depts_add
   },
   methods: {
     changeTab(tab) {

@@ -18,6 +18,7 @@
             <tr>
               <th>ID</th>
               <th>Nazwa</th>
+              <th>Usuń</th>
             </tr>
           </thead>
           <tbody>
@@ -40,6 +41,8 @@
 </template>
 
 <script>
+import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
+
 export default {
   name: 'Departments',
   data() {
@@ -47,10 +50,12 @@ export default {
       alert: {},
       departments: []
     }
+  },components: {
+    fai: FontAwesomeIcon
   },
   methods: {
     getDepts() {
-      this.$http.get(this.globalURL + '/api/dept')
+      this.$http.get(this.globalURL + '/api/depts')
         .then(res => {
           if (res.status == 200) {
             this.departments = res.body;

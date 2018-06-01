@@ -18,18 +18,18 @@
             <tr>
               <th>ID</th>
               <th>Nazwa</th>
-              <th>Stawka godzinowa</th>
               <th>Godziny pracy</th>
               <th>Stawka godzinowa</th>
               <th>Dział</th>
+              <th>Usuń</th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="job in jobs">
               <td>{{job.stanowisko_id}}</td>
               <td>{{job.nazwa_stanowiska}}</td>
+              <td>{{job.godz_rozpoczecia_naliczania_oplaty.slice(0,5)}} - {{job.godz_zakonczenia_naliczania_oplaty.slice(0,5)}}</td>
               <td>{{job.stawka_godz}}</td>
-              <td>{{job.godz_rozpoczecia_naliczania_oplaty}} - {{job.godz_zakonczenia_naliczania_oplaty}}</td>
               <td>{{job.dzial_id}}</td>
               <td>
                 <button type="button" class="button is-danger" @click="deleteJob(job.dzial_id)"> <fai icon="user-times"/> </button>
@@ -47,6 +47,8 @@
 </template>
 
 <script>
+import FontAwesomeIcon from '@fortawesome/vue-fontawesome'
+
 export default {
   name: 'Jobs',
   data() {
@@ -54,6 +56,8 @@ export default {
       alert: {},
       jobs: []
     }
+  },components: {
+    fai: FontAwesomeIcon
   },
   methods: {
     getJobs() {
@@ -78,13 +82,12 @@ export default {
     deleteJob(id) {
       this.$http.delete(this.globalURL + '/api/jobs/' + id)
         .then(res => {
-        if (res.status != 200) {
+          if (res.status != 200) {
             this.alert = {
               success: false,
               message: 'Błąd podczas usuwania stanowska.'
             };
-          }
-          else {
+          } else {
             this.getJobs();
           }
         })
@@ -96,7 +99,7 @@ export default {
         });
     }
   },
-  mounted(){
+  mounted() {
     this.getJobs();
   }
 }
