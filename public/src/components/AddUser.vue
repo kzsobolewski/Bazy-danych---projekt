@@ -163,7 +163,7 @@ export default {
 
       this.$http.post(this.globalURL + '/api/workers', data)
         .then(res => {
-          if (res.status == 201) {
+          if (res.status == 200) {
             this.alert = {
               success: true,
               message: 'Dodano pomyślnie pracownika'
@@ -198,8 +198,6 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.notification {
-    margin-top: 1rem;
-}
+<style>
+
 </style>

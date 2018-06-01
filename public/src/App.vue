@@ -22,6 +22,8 @@ import stats from './components/Stats.vue'
 import workers_add from './components/AddUser.vue'
 import edit from './components/EditUser.vue'
 import workers from './components/Workers.vue'
+import depts from './components/Departments.vue'
+import jobs from './components/Jobs.vue'
 import payments from './components/Payments.vue'
 
 export default {
@@ -40,7 +42,9 @@ export default {
     workers_add,
     edit,
     payments,
-    workers
+    workers,
+    jobs,
+    depts
   },
   methods: {
     changeTab(tab) {

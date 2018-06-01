@@ -1,4 +1,5 @@
 <template lang="html">
+  <div>
   <div class="card">
     <header class="card-header">
       <p class="card-header-title">
@@ -44,7 +45,10 @@
       </div>
     </div>
   </div>
-
+  <div class="notification" :class="{'is-success':alert.success, 'is-danger':!alert.success}" v-if="alert.message">
+    {{alert.message}}
+  </div>
+</div>
 </template>
 
 <script>
@@ -54,14 +58,8 @@ export default {
   name: 'Workers',
   data() {
     return {
-      workers: [{
-        imie: 'Bob',
-        nazwisko: 'Cookie',
-        data_urodzenia: '1/4/2000',
-        plec: 'm',
-        pracownik_id: 1,
-        stanowisko_id: 'Programista'
-      }]
+      workers: [],
+      alert: {}
     }
   },
   components: {
@@ -71,25 +69,37 @@ export default {
     getWorkers() {
       this.$http.get(this.globalURL + '/api/workers').
       then(res => {
-        this.workers = res.body;
+        if (res.status == 200) {
+          this.workers = res.body;
+        } else {
+          this.alert = {
+            success: false,
+            message: 'Nie udało się pobrać pracowników z serwera'
+          };
+        }
       }).catch(err => {
-        console.error(err);
+        this.alert = {
+          success: false,
+          message: 'Nie można połączyć się z bazą danych.'
+        };
       });
-    },
-    getJobs(){
-      // let jobs = [];
-      // for(worker of workers){
-      //   jobs.push(worker.stanowisko_id);
-      // }
-      // jobs.join
     },
     deleteWorker(id) {
       this.$http.delete(this.globalURL + '/api/workers/' + id)
         .then(res => {
-          console.log(res.body);
-          this.getWorkers();
+          if (res.status == 200)
+            this.getWorkers();
+          else {
+            this.alert = {
+              success: false,
+              message: 'Nie udało się usunąć pracownika'
+            };
+          }
         }).catch(err => {
-          console.error(err);
+          this.alert = {
+            success: false,
+            message: 'Nie można połączyć się z bazą danych.'
+          };
         });
     },
     enterEdit(id) {
