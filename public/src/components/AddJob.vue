@@ -167,7 +167,7 @@ export default {
 
       this.$http.post(this.globalURL + '/api/jobs', job)
         .then(res => {
-          if (res.status == 200) {
+          if (res.status == 201) {
             this.alert = {
               success: true,
               message: 'Dodano pomyślnie pracownika'
@@ -175,7 +175,7 @@ export default {
           } else {
             this.alert = {
               success: false,
-              message: 'Bład SQL:' + res.status
+              message: 'Bład SQL: ' + res.status
             }
           }
         })

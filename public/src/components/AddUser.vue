@@ -38,8 +38,8 @@
           <label class="label">Stanowisko</label>
           <div class="select" :class="{'is-danger' : errors.stanowisko_id}">
             <select v-model="stanowisko_id">
-              <option value="podawacz">Podawacz kawy</option>
-              <option value="Koder">Koder</option>
+              <option value="1">Podawacz kawy</option>
+              <option value="2">Koder</option>
           </select>
           </div>
           <p v-if="errors.stanowisko_id" class="help is-danger">
