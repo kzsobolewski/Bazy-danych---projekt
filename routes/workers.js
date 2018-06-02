@@ -34,7 +34,6 @@ router.post('/', jsonParser,(req, res) => {
     return;
   }
   console.log("[MySql] Worker record added");
-  console.log(result);
   res.sendStatus(201);
   });
 });
@@ -48,9 +47,25 @@ router.delete('/:id', (req, res) =>{
       return;
     }
     console.log("[MySql] Deleted");
-    console.log(result);
     res.sendStatus(200);
   });
+});
+
+
+router.put('/:id',jsonParser , (req, res) =>{
+  if(!req.body){
+    res.sendStatus(400);
+    return;
+  }
+  connection.query('UPDATE Pracownicy SET ? WHERE pracownik_id = ?', [req.body, req.params.id] , (err, result) => {
+    if(err){
+      console.log("[MySql]" + err);
+      res.sendStatus(409);
+      return;
+    }
+    console.log("[MySql] Worker edited");
+    res.sendStatus(200);
+ });
 });
 
 

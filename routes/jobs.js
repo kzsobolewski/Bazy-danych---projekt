@@ -54,5 +54,20 @@ router.delete('/:id', (req, res) =>{
   });
 });
 
+router.put('/:id',jsonParser , (req, res) =>{
+  if(!req.body){
+    res.sendStatus(400);
+    return;
+  }
+  connection.query('UPDATE Stanowiska SET ? WHERE stanowisko_id = ?', [req.body, req.params.id] , (err, result) => {
+    if(err){
+      console.log("[MySql]" + err);
+      res.sendStatus(409);
+      return;
+    }
+    console.log("[MySql] Job edited");
+    res.sendStatus(200);
+ });
+});
 
 module.exports = router;
