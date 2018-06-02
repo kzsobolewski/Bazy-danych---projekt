@@ -65,7 +65,7 @@
               Mężczyzna
             </label>
             <label class="radio">
-              <input type="radio" value="f" v-model="plec" >
+              <input type="radio" value="k" v-model="plec" >
               Kobieta
             </label>
           </div>

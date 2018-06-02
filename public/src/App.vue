@@ -1,76 +1,22 @@
-<template>
-<div id="app">
-  <Nav/>
-  <div class="wrapper">
-    <div class="columns">
-      <Sidebar @change-tab="changeTab" />
-      <main class="column">
-        <component :is="currentTab" @edit-user="editUser" :id="currentUser"></component>
-      </main>
-    </div>
-  </div>
+<template lang="html">
+  <div id="app">
+    <Nav/>
+    <router-view></router-view>
 </div>
 </template>
 
 <script>
 // Layout
 import Nav from './components/Nav'
-import Sidebar from './components/Sidebar.vue'
-
-// Tabs
-import stats from './components/Stats.vue'
-import workers_add from './components/AddUser.vue'
-import edit from './components/EditUser.vue'
-import workers from './components/Workers.vue'
-import depts from './components/Departments.vue'
-import depts_add from './components/AddDept.vue'
-import jobs from './components/Jobs.vue'
-import jobs_add from './components/AddJob.vue'
-import payments from './components/Payments.vue'
 
 export default {
-  name: 'App',
-  data() {
-    return {
-      currentTab: 'stats',
-      currentUser: null,
-      previousTab: null
-    }
-  },
   components: {
-    Nav,
-    Sidebar,
-    stats,
-    workers_add,
-    jobs_add,
-    edit,
-    payments,
-    workers,
-    jobs,
-    depts,
-    depts_add
-  },
-  methods: {
-    changeTab(tab) {
-      this.previousTab = this.currentTab;
-      this.currentTab = tab;
-      this.currentUser = null;
-    },
-    goBack() {
-      if (this.previousTab)
-        this.currentTab = this.previousTab;
-    },
-    editUser(id) {
-      this.previousTab = this.currentTab;
-      this.currentTab = 'edit';
-      this.currentUser = id;
-    }
+    Nav
   }
 }
 </script>
 
-<style>
+<style lang="css">
 @import './css/bulma.min.css';
 @import './css/main.css';
-@import './css/admin.css';
 </style>

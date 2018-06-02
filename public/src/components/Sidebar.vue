@@ -5,29 +5,29 @@
         Główne
       </p>
       <ul class="menu-list">
-        <li><a href="#" @click="changeTab('stats')"><span class="icon"><fai icon="chart-bar"/></span> Statystyki</a></li>
-        <li><a href="#" @click="changeTab('payments')"><span class="icon"><fai icon="money-bill-wave"/></span> Wypłaty</a></li>
+        <li><router-link to="/admin" exact><span class="icon"><fai icon="chart-bar"/></span> Statystyki</router-link></li>
+        <li><router-link to="/admin/payments" exact><span class="icon"><fai icon="money-bill-wave"/></span> Wypłaty</router-link></li>
       </ul>
       <p class="menu-label">
         Pracownicy
       </p>
       <ul class="menu-list">
-        <li><a href="#" @click="changeTab('workers')"><span class="icon"><fai icon="users"/></span> Lista</a></li>
-        <li><a href="#" @click="changeTab('workers_add')"><span class="icon"><fai icon="user-plus"/></span> Dodaj</a></li>
+        <li><router-link to="/admin/workers" exact><span class="icon"><fai icon="users"/></span> Lista</router-link></li>
+        <li><router-link to="/admin/workers/add"><span class="icon"><fai icon="user-plus"/></span> Dodaj</router-link></li>
       </ul>
       <p class="menu-label">
         Stanowiska
       </p>
       <ul class="menu-list">
-        <li><a href="#" @click="changeTab('jobs')"><span class="icon"><fai icon="briefcase"/></span> Lista</a></li>
-        <li><a href="#" @click="changeTab('jobs_add')"><span class="icon"><fai icon="plus"/></span> Dodaj</a></li>
+        <li><router-link to="/admin/jobs" exact><span class="icon"><fai icon="briefcase"/></span> Lista</router-link></li>
+        <li><router-link to="/admin/jobs/add"><span class="icon"><fai icon="plus"/></span> Dodaj</router-link></li>
       </ul>
       <p class="menu-label">
         Działy
       </p>
       <ul class="menu-list">
-        <li><a href="#" @click="changeTab('depts')"><span class="icon"><fai icon="building"/></span> Lista</a></li>
-        <li><a href="#" @click="changeTab('depts_add')"><span class="icon"><fai icon="plus"/></span> Dodaj</a></li>
+        <li><router-link to="/admin/depts" exact><span class="icon"><fai icon="building"/></span> Lista</router-link></li>
+        <li><router-link to="/admin/depts/add"><span class="icon"><fai icon="plus"/></span> Dodaj</router-link></li>
       </ul>
     </nav>
   </aside>

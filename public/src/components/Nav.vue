@@ -4,12 +4,12 @@
       <div class="hero-head">
         <nav class="navbar has-shadow" role="navigation" aria-label="main navigation">
           <div class="navbar-brand">
-            <a class="navbar-item is--brand" href="/">
+            <router-link class="navbar-item is--brand" to="/" exact-active-class="" active-class="" exact>
               <img class="navbar-brand-logo" src="../assets/logo.svg" alt="Logo">
-            </a>
-            <a class="navbar-item is-tab is-hidden-mobile" href="/">Home</a>
-            <a class="navbar-item is-tab is-hidden-mobile is-active" href="/admin">Admin</a>
-            <a class="navbar-item is-tab is-hidden-mobile" href="/worker">Pracownik</a>
+            </router-link>
+            <router-link class="navbar-item is-tab is-hidden-mobile" to="/" exact>Home</router-link>
+            <router-link class="navbar-item is-tab is-hidden-mobile" to="/admin">Admin</router-link>
+            <router-link class="navbar-item is-tab is-hidden-mobile" to="/worker">Pracownik</router-link>
 
             <button class="button navbar-burger" data-target="navMenu">
                 <span></span>
@@ -19,9 +19,9 @@
           </div>
 
           <div class="navbar-menu navbar-end" id="navMenu">
-            <a class="navbar-item is-tab is-hidden-tablet" href="/">Home</a>
-            <a class="navbar-item is-tab is-hidden-tablet is-active" href="/admin">Admin</a>
-            <a class="navbar-item is-tab is-hidden-tablet" href="/worker">Pracownik</a>
+            <router-link class="navbar-item is-tab is-hidden-tablet" to="/">Home</router-link>
+            <router-link class="navbar-item is-tab is-hidden-tablet" to="/admin">Admin</router-link>
+            <router-link class="navbar-item is-tab is-hidden-tablet" to="/worker">Pracownik</router-link>
           </div>
         </nav>
       </div>
