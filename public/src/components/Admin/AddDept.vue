@@ -5,11 +5,6 @@
       <p class="card-header-title">
         Dodaj Stanowisko
       </p>
-      <a href="#" class="card-header-icon" aria-label="more options">
-        <span class="icon">
-          <i class="fas fa-angle-down" aria-hidden="true"></i>
-        </span>
-      </a>
     </header>
     <div class="card-content">
       <form class="content">
@@ -30,7 +25,7 @@
             </a>
           </p>
           <p class="control">
-            <a class="button is-light">
+            <a class="button is-light"  @click="reset">
               Cancel
             </a>
           </p>
@@ -88,7 +83,7 @@ export default {
 
       this.$http.post(this.globalURL + '/api/depts', dzial)
         .then(res => {
-          if (res.status == 200) {
+          if (res.status == 201) {
             this.alert = {
               success: true,
               message: 'Dodano pomyślnie dział'

@@ -18,15 +18,19 @@ import Worker from './Worker.vue'
 
 // Sub routes
 // ----- ADMIN
-import stats from './components/Stats.vue'
-import workers_add from './components/AddUser.vue'
-import edit from './components/EditUser.vue'
-import workers from './components/Workers.vue'
-import depts from './components/Departments.vue'
-import depts_add from './components/AddDept.vue'
-import jobs from './components/Jobs.vue'
-import jobs_add from './components/AddJob.vue'
-import payments from './components/Payments.vue'
+import stats from './components/Admin/Stats.vue'
+import workers_add from './components/Admin/AddUser.vue'
+import edit from './components/Admin/EditUser.vue'
+import workers from './components/Admin/Workers.vue'
+import depts from './components/Admin/Departments.vue'
+import depts_add from './components/Admin/AddDept.vue'
+import jobs from './components/Admin/Jobs.vue'
+import jobs_add from './components/Admin/AddJob.vue'
+import payments from './components/Admin/Payments.vue'
+import entries from './components/Admin/Entries.vue'
+
+// ----- WORKER
+import worker_workers from './components/Worker/Workers.vue'
 
 fontawesome.library.add(solid);
 
@@ -41,20 +45,50 @@ const routes = [{
 }, {
   path: '/admin',
   component: Admin,
-  children: [
-    {path:'',component:stats},
-    {path:'jobs',component:jobs},
-    {path:'workers',component:workers},
-    {path:'depts',component:depts},
-    {path:'jobs/add',component:jobs_add},
-    {path:'depts/add',component: depts_add},
-    {path:'workers/add',component: workers_add},
-    {path:'payments',component:payments}
+  children: [{
+      path: '',
+      component: stats
+    },
+    {
+      path: 'jobs',
+      component: jobs
+    },
+    {
+      path: 'workers',
+      component: workers
+    },
+    {
+      path: 'depts',
+      component: depts
+    },
+    {
+      path: 'jobs/add',
+      component: jobs_add
+    },
+    {
+      path: 'depts/add',
+      component: depts_add
+    },
+    {
+      path: 'workers/add',
+      component: workers_add
+    },
+    {
+      path: 'payments',
+      component: payments
+    },
+    {
+      path: 'entries',
+      component: entries
+    }
   ]
-} ,{
+}, {
   path: '/worker',
   component: Worker,
-  children: [{path:'test', component: Home}]
+  children: [{
+    path: '',
+    component: worker_workers
+  }]
 }];
 
 const router = new VueRouter({

@@ -1,12 +1,23 @@
 <template lang="html">
-<div>
-  PRACOWNIK
- <router-view></router-view>
-</div>
+  <div class="wrapper">
+    <div class="columns">
+      <Sidebar/>
+      <main class="column">
+        <router-view></router-view>
+      </main>
+    </div>
+  </div>
 </template>
 
 <script>
-export default {}
+import Sidebar from './components/Worker/Sidebar.vue'
+
+export default {
+  name: 'Workers',
+  components: {
+    Sidebar
+  }
+}
 </script>
 
 <style lang="css">

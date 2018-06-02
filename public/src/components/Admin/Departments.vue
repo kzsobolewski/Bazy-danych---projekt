@@ -50,7 +50,8 @@ export default {
       alert: {},
       departments: []
     }
-  },components: {
+  },
+  components: {
     fai: FontAwesomeIcon
   },
   methods: {
@@ -74,7 +75,7 @@ export default {
         });
     },
     deleteDept(id) {
-      this.$http.delete(this.globalURL + '/api/dept/' + id)
+      this.$http.delete(this.globalURL + '/api/depts/' + id)
         .then(res => {
           if (res.status == 409) {
             this.alert = {
@@ -91,10 +92,17 @@ export default {
           }
         })
         .catch(err => {
-          this.alert = {
-            success: false,
-            message: 'Nie można połączyć się z bazą danych.'
-          };
+          if (res.status == 409) {
+            this.alert = {
+              success: false,
+              message: 'Nie można usunąć działu, z istniejącymi stanowiskami.'
+            };
+          } else {
+            this.alert = {
+              success: false,
+              message: 'Nie można połączyć się z bazą danych.'
+            };
+          }
         });
     }
   },

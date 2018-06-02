@@ -5,11 +5,7 @@
       <p class="card-header-title">
         Dodaj pracownika
       </p>
-      <a href="#" class="card-header-icon" aria-label="more options">
-        <span class="icon">
-          <i class="fas fa-angle-down" aria-hidden="true"></i>
-        </span>
-      </a>
+
     </header>
     <div class="card-content">
       <form class="content">
@@ -38,9 +34,8 @@
           <label class="label">Stanowisko</label>
           <div class="select" :class="{'is-danger' : errors.stanowisko_id}">
             <select v-model="stanowisko_id">
-              <option value="1">Podawacz kawy</option>
-              <option value="2">Koder</option>
-          </select>
+              <option v-for="job in jobs" :value="job.stanowisko_id">{{job.nazwa_stanowiska}}</option>
+            </select>
           </div>
           <p v-if="errors.stanowisko_id" class="help is-danger">
             {{errors.stanowisko_id}}
@@ -78,7 +73,7 @@
             </a>
           </p>
           <p class="control">
-            <a class="button is-light">
+            <a class="button is-light" @click="reset">
               Cancel
             </a>
           </p>
@@ -107,7 +102,8 @@ export default {
       stanowisko_id: '',
       data_urodzenia: '',
       errors: {},
-      alert: {}
+      alert: {},
+      jobs: [],
     }
   },
   components: {
@@ -119,6 +115,25 @@ export default {
         this.addUser();
         this.reset();
       }
+    },
+    getJobs() {
+      this.$http.get(this.globalURL + '/api/jobs')
+        .then(res => {
+          if (res.status == 200) {
+            this.jobs = res.body;
+          } else {
+            this.alert = {
+              success: false,
+              message: 'Nie udało się pobrać stanowisk z serwera'
+            };
+          }
+        })
+        .catch(err => {
+          this.alert = {
+            success: false,
+            message: 'Nie można połączyć się z bazą danych.'
+          };
+        });
     },
     validate() {
       var flag = true;
@@ -194,6 +209,9 @@ export default {
       this.$delete(this.errors, 'stanowisko_id');
       this.$delete(this.errors, 'data_urodzenia');
     }
+  },
+  mounted(){
+    this.getJobs();
   }
 }
 </script>

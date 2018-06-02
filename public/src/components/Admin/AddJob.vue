@@ -5,11 +5,6 @@
       <p class="card-header-title">
         Dodaj Stanowisko
       </p>
-      <a href="#" class="card-header-icon" aria-label="more options">
-        <span class="icon">
-          <i class="fas fa-angle-down" aria-hidden="true"></i>
-        </span>
-      </a>
     </header>
     <div class="card-content">
       <form class="content">
@@ -27,8 +22,7 @@
           <label class="label">Dział</label>
           <div class="select" :class="{'is-danger' : errors.dzial_id}">
             <select v-model="job.dzial_id">
-              <option value="podawacz">Podawacz kawy</option>
-              <option value="Koder">Koder</option>
+              <option v-for="dept in departments" :value="dept.dzial_id">{{dept.nazwa}}</option>
           </select>
           </div>
           <p v-if="errors.dzial_id" class="help is-danger">
@@ -63,10 +57,15 @@
           </p>
         </div>
 
-        <div class="field">
-          <label class="label" for="stawka_godz">Stawka</label>
+        <label class="label" for="stawka_godz">Stawka</label>
+        <div class="field has-addons">
           <div class="control">
             <input id="stawka_godz" class="input" :class="{'is-danger' : errors.stawka_godz}" type="number" placeholder="Podaj stawkę..." v-model="job.stawka_godz">
+          </div>
+          <div class="control">
+            <a class="button is-static">
+              zł
+            </a>
           </div>
           <p v-if="errors.stawka_godz" class="help is-danger">
             {{errors.stawka_godz}}
@@ -80,7 +79,7 @@
             </a>
           </p>
           <p class="control">
-            <a class="button is-light">
+            <a class="button is-light" @click="reset">
               Cancel
             </a>
           </p>
@@ -104,21 +103,40 @@ export default {
   data() {
     return {
       job: {
-        nazwa: '',
         dzial_id: '',
         nazwa_stanowiska: '',
         godz_rozpoczecia_naliczania_oplaty: '',
         godz_zakonczenia_naliczania_oplaty: '',
-        stawka_godz:''
+        stawka_godz: ''
       },
       errors: {},
-      alert: {}
+      alert: {},
+      departments: []
     }
   },
   components: {
     Datepicker
   },
   methods: {
+    getDepts() {
+      this.$http.get(this.globalURL + '/api/depts')
+        .then(res => {
+          if (res.status == 200) {
+            this.departments = res.body;
+          } else {
+            this.alert = {
+              success: false,
+              message: 'Nie udało się pobrać działów z serwera'
+            };
+          }
+        })
+        .catch(err => {
+          this.alert = {
+            success: false,
+            message: 'Nie można połączyć się z bazą danych.'
+          };
+        });
+    },
     submit() {
       if (this.validate()) {
         this.addJob();
@@ -128,7 +146,7 @@ export default {
     resetErrors() {
       this.errors = {};
       for (let prop in this.job) {
-        this.$delete(errors, prop);
+        this.$delete(this.errors, prop);
       };
     },
     validate() {
@@ -170,7 +188,7 @@ export default {
           if (res.status == 201) {
             this.alert = {
               success: true,
-              message: 'Dodano pomyślnie pracownika'
+              message: 'Dodano pomyślnie stanowisko.'
             };
           } else {
             this.alert = {
@@ -182,7 +200,7 @@ export default {
         .catch(err => {
           this.alert = {
             success: false,
-            message: 'Bład podczas połączenia z bazą danych'
+            message: 'Błąd podczas połączenia z bazą danych'
           }
         });
     },
@@ -192,6 +210,9 @@ export default {
       }
       this.resetErrors();
     }
+  },
+  mounted() {
+    this.getDepts();
   }
 }
 </script>

@@ -3,13 +3,9 @@
   <div class="card">
     <header class="card-header">
       <p class="card-header-title">
-        Działy
+        Stanowiska
       </p>
-      <a href="#" class="card-header-icon" aria-label="more options">
-            <span class="icon">
-              <i class="fas fa-angle-down" aria-hidden="true"></i>
-            </span>
-          </a>
+
     </header>
     <div class="card-content">
       <div class="content">
@@ -32,7 +28,7 @@
               <td>{{job.stawka_godz}}</td>
               <td>{{job.dzial_id}}</td>
               <td>
-                <button type="button" class="button is-danger" @click="deleteJob(job.dzial_id)"> <fai icon="user-times"/> </button>
+                <button type="button" class="button is-danger" @click="deleteJob(job.stanowisko_id)"> <fai icon="user-times"/> </button>
               </td>
             </tr>
           </tbody>
@@ -56,7 +52,8 @@ export default {
       alert: {},
       jobs: []
     }
-  },components: {
+  },
+  components: {
     fai: FontAwesomeIcon
   },
   methods: {
@@ -92,10 +89,17 @@ export default {
           }
         })
         .catch(err => {
-          this.alert = {
-            success: false,
-            message: 'Nie można połączyć się z bazą danych.'
-          };
+          if (err.status == 409) {
+            this.alert = {
+              success: false,
+              message: 'Nie można usunąć stanowiska, do którego przypisani są pracownicy'
+            }
+          } else {
+            this.alert = {
+              success: false,
+              message: 'Nie można połączyć się z bazą danych.'
+            };
+          }
         });
     }
   },
