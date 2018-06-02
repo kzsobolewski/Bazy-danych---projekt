@@ -7,9 +7,8 @@ var jsonParser = bodyParser.json();
 const router = express.Router();
 
 
-
 router.get('/', (req, res) => {
-  connection.query('SELECT * FROM Pracownicy', (err, result) => {
+  connection.query('SELECT * FROM Odbicia', (err, result) => {
     if(err){
       console.log("[MySql] " + err);
       res.sendStatus(404);
@@ -23,25 +22,28 @@ router.get('/', (req, res) => {
 
 router.post('/', jsonParser,(req, res) => {
   if (!req.body){
-     res.status(400);
-     return;
+      res.sendStatus(400);
+      return;
    }
-   Object.assign(req.body, {data_dodania: new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + (new Date().getDate() + 1 ) });
-  connection.query('insert into Pracownicy set ?', req.body, (err, result) => {
-  if(err){
-    console.error("[MySql]" + err);
-    res.sendStatus(409);
-    return;
-  }
-  console.log("[MySql] Worker record added");
-  console.log(result);
-  res.sendStatus(201);
+  var datetime = new Date();
+  datetime.setHours(datetime.getHours()+2);
+  Object.assign( req.body, {godzina : datetime});
+  connection.query('insert into Odbicia set ?', req.body, (err, result) => {
+    if(err) {
+      console.error("[MySql]" + err);
+      res.sendStatus(409);
+      return;
+    }
+    console.log("[MySql] Entry record added");
+    console.log(result);
+    res.sendStatus(201);
   });
 });
 
 
+
 router.delete('/:id', (req, res) =>{
-  connection.query('DELETE FROM Pracownicy WHERE pracownik_id = ?',req.params.id , (err, result) => {
+  connection.query('DELETE FROM Odbicia WHERE odbicie_id = ?',req.params.id , (err, result) => {
     if(err) {
       console.error("[MySql]" + err);
       res.sendStatus(409);
@@ -52,6 +54,5 @@ router.delete('/:id', (req, res) =>{
     res.sendStatus(200);
   });
 });
-
 
 module.exports = router;
