@@ -19,6 +19,18 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/:id', (req, res) => {
+  connection.query('SELECT * FROM Dzialy WHERE dzial_id = ?', req.params.id , (err, result) => {
+    if(err){
+      console.log("[MySql] " + err);
+      res.status(404);
+    }else {
+      res.json(result);
+      res.status(200);
+    }
+  });
+});
+
 
 router.post('/', jsonParser,(req, res) => {
   if (!req.body){
