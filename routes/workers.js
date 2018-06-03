@@ -20,6 +20,18 @@ router.get('/', (req, res) => {
   });
 });
 
+router.get('/:id', (req, res) => {
+  connection.query('SELECT * FROM Pracownicy WHERE pracownik_id = (?)', req.params.id , (err, result) => {
+    if(err){
+      console.log("[MySql] " + err);
+      res.sendStatus(404);
+    }else {
+      res.status(200);
+      res.json(result);
+    }
+  });
+});
+
 
 router.post('/', jsonParser,(req, res) => {
   if (!req.body){
