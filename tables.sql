@@ -26,7 +26,7 @@ CREATE TABLE `Dzialy` (
   `dzial_id` int(11) NOT NULL AUTO_INCREMENT,
   `nazwa` varchar(30) NOT NULL,
   PRIMARY KEY (`dzial_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -35,7 +35,7 @@ CREATE TABLE `Dzialy` (
 
 LOCK TABLES `Dzialy` WRITE;
 /*!40000 ALTER TABLE `Dzialy` DISABLE KEYS */;
-INSERT INTO `Dzialy` VALUES (1,'LOGISTYKA'),(2,'SPRZEDAZ'),(3,'PRODUKCJA'),(4,'Logistyka');
+INSERT INTO `Dzialy` VALUES (1,'LOGISTYKA'),(2,'SPRZEDAZ'),(3,'PRODUKCJA');
 /*!40000 ALTER TABLE `Dzialy` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -51,10 +51,8 @@ CREATE TABLE `Odbicia` (
   `godzina` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `We_Wy` varchar(2) NOT NULL,
   `pracownik_id` int(11) NOT NULL,
-  PRIMARY KEY (`odbicie_id`),
-  KEY `Odbica_Pracownicy` (`pracownik_id`),
-  CONSTRAINT `Odbica_Pracownicy` FOREIGN KEY (`pracownik_id`) REFERENCES `Pracownicy` (`pracownik_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  PRIMARY KEY (`odbicie_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,6 +61,7 @@ CREATE TABLE `Odbicia` (
 
 LOCK TABLES `Odbicia` WRITE;
 /*!40000 ALTER TABLE `Odbicia` DISABLE KEYS */;
+INSERT INTO `Odbicia` VALUES (2,'2018-06-02 12:27:44','Wy',6),(3,'2018-06-02 00:32:03','We',6),(4,'2018-06-02 00:32:04','We',6),(5,'2018-06-02 02:36:16','We',6),(6,'2018-06-02 02:36:18','We',6),(7,'2018-06-02 02:36:18','We',6),(8,'2018-06-02 02:36:19','We',6),(9,'2018-06-02 02:36:19','We',6),(10,'2018-06-02 02:36:20','We',6),(11,'2018-06-02 02:36:20','We',6),(12,'2018-06-02 02:36:25','Wy',6),(13,'2018-06-02 02:36:26','Wy',6),(14,'2018-06-02 02:36:27','Wy',6);
 /*!40000 ALTER TABLE `Odbicia` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,7 +83,7 @@ CREATE TABLE `Pracownicy` (
   PRIMARY KEY (`pracownik_id`),
   KEY `Pracownicy_Stanowisko` (`stanowisko_id`),
   CONSTRAINT `Pracownicy_Stanowisko` FOREIGN KEY (`stanowisko_id`) REFERENCES `Stanowiska` (`stanowisko_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=56 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -93,7 +92,7 @@ CREATE TABLE `Pracownicy` (
 
 LOCK TABLES `Pracownicy` WRITE;
 /*!40000 ALTER TABLE `Pracownicy` DISABLE KEYS */;
-INSERT INTO `Pracownicy` VALUES (5,'Bartlomiej','Babuski','1996-12-30','2011-04-15','m',1),(6,'Czarek','Cebulski','1976-05-10','2010-01-05','m',2),(7,'Stanislaw','Moniuszko','1967-10-13','2011-04-11','m',2),(8,'Monika','Wiernacka','2000-08-01','2010-07-10','k',4),(9,'Roksana','Roniek','2000-01-23','2013-10-05','k',4),(10,'Wiktoria','Mikulska','1999-03-08','2012-11-14','k',5),(11,'Adam','Mickiewicz','1976-06-25','2011-04-19','m',6),(19,'Bartlomiej','Babuski','1996-12-30','2011-04-15','m',1),(20,'Czarek','Cebulski','1976-05-10','2010-01-05','m',2),(21,'Stanislaw','Moniuszko','1967-10-13','2011-04-11','m',2),(22,'Monika','Wiernacka','2000-08-01','2010-07-10','k',4),(23,'Roksana','Roniek','2000-01-23','2013-10-05','k',4),(24,'Wiktoria','Mikulska','1999-03-08','2012-11-14','k',5),(25,'Adam','Mickiewicz','1976-06-25','2011-04-19','m',6),(29,'Czeslaw','Milosz','1980-04-21','2011-02-14','m',7),(30,'Andrzej','Golota','1968-01-05','2012-11-01','m',7),(31,'Antoni','Schmidt','1950-08-30','2009-01-03','m',8),(32,'Krzysztof','Sobolewski','1996-04-30','2018-05-30','m',3),(33,'Arkadiusz','Sobolewski','1996-04-30','2018-05-30','m',3),(34,'Marcin','Sobolewski','1996-04-30','2018-05-30','m',3),(35,'Marcin','Sobolewski','1996-04-30','2018-05-30','m',3),(36,'Marcin','Sobolewski','1996-04-30','2018-05-30','m',3);
+INSERT INTO `Pracownicy` VALUES (6,'Czarek','Cebulski','1976-05-10','2010-01-05','m',2),(7,'Stanislaw','Moniuszko','1967-10-13','2011-04-11','m',2),(9,'Roksana','Roniek','2000-01-23','2013-10-05','k',4),(10,'Wiktoria','Mikulska','1999-03-08','2012-11-14','k',5),(11,'Adam','Mickiewicz','1976-06-25','2011-04-19','m',6);
 /*!40000 ALTER TABLE `Pracownicy` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -114,7 +113,7 @@ CREATE TABLE `Stanowiska` (
   PRIMARY KEY (`stanowisko_id`),
   KEY `Stanowisko_Dzial` (`dzial_id`),
   CONSTRAINT `Stanowisko_Dzial` FOREIGN KEY (`dzial_id`) REFERENCES `Dzialy` (`dzial_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -123,7 +122,7 @@ CREATE TABLE `Stanowiska` (
 
 LOCK TABLES `Stanowiska` WRITE;
 /*!40000 ALTER TABLE `Stanowiska` DISABLE KEYS */;
-INSERT INTO `Stanowiska` VALUES (1,'SPECJALISTA DO SPRAW LOGISTYKI',20.00,'08:00:00','22:00:00',1),(2,'KIEROWCA',15.00,'03:00:00','24:00:00',1),(3,'MECHANIK SAMOCHODOWY',10.00,'07:00:00','17:00:00',1),(4,'SPRZEDAWCA',13.00,'07:00:00','17:00:00',2),(5,'KONSULTANT',13.00,'07:00:00','17:00:00',2),(6,'TLUMACZ',19.00,'07:00:00','17:00:00',2),(7,'PRACOWNIK FIZYCZNY',10.00,'07:00:00','17:00:00',3),(8,'KIEROWNIK PRODUKCJI',15.00,'07:00:00','17:00:00',3),(9,'Monter',21.00,'06:30:00','23:00:00',1);
+INSERT INTO `Stanowiska` VALUES (1,'SPECJALISTA DO SPRAW LOGISTYKI',20.00,'08:00:00','22:00:00',1),(2,'KIEROWCA',15.00,'03:00:00','24:00:00',1),(4,'SPRZEDAWCA',13.00,'07:00:00','17:00:00',2),(5,'KONSULTANT',13.00,'07:00:00','17:00:00',2),(6,'TLUMACZ',19.00,'07:00:00','17:00:00',2),(7,'PRACOWNIK FIZYCZNY',10.00,'07:00:00','17:00:00',3),(8,'KIEROWNIK PRODUKCJI',15.00,'07:00:00','17:00:00',3);
 /*!40000 ALTER TABLE `Stanowiska` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -162,4 +161,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2018-05-31 23:19:54
+-- Dump completed on 2018-06-03 15:54:18

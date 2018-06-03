@@ -35,7 +35,6 @@ router.post('/', jsonParser,(req, res) => {
       return;
     }
     console.log("[MySql] Job record added");
-    console.log(result);
     res.sendStatus(201);
   });
 });
@@ -49,7 +48,6 @@ router.delete('/:id', (req, res) =>{
       return;
     }
     console.log("[MySql] Deleted");
-    console.log(result);
     res.sendStatus(200);
   });
 });

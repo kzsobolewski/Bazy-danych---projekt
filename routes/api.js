@@ -8,7 +8,7 @@ const router = express.Router();
  *
  * POST status:
  * 201 - Created
- * 400 - Empty JSON - bad requestEmpty body
+ * 400 - Empty JSON - bad request
  * 409 - Conflict - SQL Error - Wrong json
  *
  * DELETE status:
