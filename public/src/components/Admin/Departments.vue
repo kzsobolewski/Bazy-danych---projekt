@@ -18,6 +18,7 @@
             <tr>
               <th>ID</th>
               <th>Nazwa</th>
+              <th>Edytuj</th>
               <th>Usuń</th>
             </tr>
           </thead>
@@ -25,6 +26,9 @@
             <tr v-for="department in departments">
               <td>{{department.dzial_id}}</td>
               <td>{{department.nazwa}}</td>
+              <td>
+                <router-link type="button" class="button is-info" :to="'depts/edit/' + department.dzial_id"> <fai icon="user-edit"/> </router-link>
+              </td>
               <td>
                 <button type="button" class="button is-danger" @click="deleteDept(department.dzial_id)"> <fai icon="user-times"/> </button>
               </td>

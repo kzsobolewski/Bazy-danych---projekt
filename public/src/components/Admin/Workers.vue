@@ -18,7 +18,7 @@
             <tr>
               <th>Imię</th>
               <th>Nazwisko</th>
-              <th>Data urodzin</th>
+              <th>Data narodzin</th>
               <th>Płeć</th>
               <th>Stanowisko</th>
               <th>Edytuj</th>
@@ -32,9 +32,9 @@
               <td>{{worker.data_urodzenia.slice(0,10)}}</td>
               <td v-if="worker.plec == 'm'">Mężczyzna</td>
                 <td v-else-if="worker.plec == 'k'">Kobieta</td>
-              <td>{{worker.stanowisko_id}}</td>
+              <td v-if="jobs">{{getJobById(worker.stanowisko_id).nazwa_stanowiska}}</td>
               <td>
-                <button type="button" class="button is-info" @click="enterEdit(worker.pracownik_id)"> <fai icon="user-edit"/> </button>
+                <router-link type="button" class="button is-info" :to="'workers/edit/' + worker.pracownik_id"> <fai icon="user-edit"/> </router-link>
               </td>
               <td>
                 <button type="button" class="button is-danger" @click="deleteWorker(worker.pracownik_id)"> <fai icon="user-times"/> </button>
@@ -59,6 +59,7 @@ export default {
   data() {
     return {
       workers: [],
+      jobs: [],
       alert: {}
     }
   },
@@ -84,6 +85,32 @@ export default {
         };
       });
     },
+    getJobs() {
+      this.$http.get(this.globalURL + '/api/jobs')
+        .then(res => {
+          if (res.status == 200) {
+            this.jobs = res.body;
+          } else {
+            this.alert = {
+              success: false,
+              message: 'Nie udało się pobrać stanowisk z serwera'
+            };
+          }
+        })
+        .catch(err => {
+          this.alert = {
+            success: false,
+            message: 'Nie można połączyć się z bazą danych.'
+          };
+        });
+    },
+    getJobById(id) {
+      for (let job of this.jobs) {
+        if (job.stanowisko_id == id)
+          return job;
+      }
+      return false;
+    },
     deleteWorker(id) {
       this.$http.delete(this.globalURL + '/api/workers/' + id)
         .then(res => {
@@ -107,6 +134,7 @@ export default {
     }
   },
   mounted() {
+    this.getJobs();
     this.getWorkers();
   },
 }

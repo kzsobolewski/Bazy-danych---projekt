@@ -17,6 +17,7 @@
               <th>Godziny pracy</th>
               <th>Stawka godzinowa</th>
               <th>Dział</th>
+              <th>Edytuj</th>
               <th>Usuń</th>
             </tr>
           </thead>
@@ -27,6 +28,9 @@
               <td>{{job.godz_rozpoczecia_naliczania_oplaty.slice(0,5)}} - {{job.godz_zakonczenia_naliczania_oplaty.slice(0,5)}}</td>
               <td>{{job.stawka_godz}}</td>
               <td>{{job.dzial_id}}</td>
+              <td>
+                <router-link type="button" class="button is-info" :to="'jobs/edit/' + job.stanowisko_id"> <fai icon="user-edit"/> </router-link>
+              </td>
               <td>
                 <button type="button" class="button is-danger" @click="deleteJob(job.stanowisko_id)"> <fai icon="user-times"/> </button>
               </td>

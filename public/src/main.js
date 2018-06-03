@@ -20,7 +20,6 @@ import Worker from './Worker.vue'
 // ----- ADMIN
 import stats from './components/Admin/Stats.vue'
 import workers_add from './components/Admin/AddUser.vue'
-import edit from './components/Admin/EditUser.vue'
 import workers from './components/Admin/Workers.vue'
 import depts from './components/Admin/Departments.vue'
 import depts_add from './components/Admin/AddDept.vue'
@@ -66,11 +65,23 @@ const routes = [{
       component: jobs_add
     },
     {
+      path: 'jobs/edit/:id',
+      component: jobs_add
+    },
+    {
       path: 'depts/add',
       component: depts_add
     },
     {
+      path: 'depts/edit/:id',
+      component: depts_add
+    },
+    {
       path: 'workers/add',
+      component: workers_add
+    },
+    {
+      path: 'workers/edit/:id',
       component: workers_add
     },
     {

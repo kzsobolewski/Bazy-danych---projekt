@@ -25,7 +25,7 @@
             </a>
           </p>
           <p class="control">
-            <a class="button is-light"  @click="reset">
+            <a class="button is-light" @click="reset">
               Cancel
             </a>
           </p>
@@ -42,7 +42,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'AddUser',
   data() {
@@ -57,7 +56,10 @@ export default {
   methods: {
     submit() {
       if (this.validate()) {
-        this.addDept();
+        if (this.$route.params.id)
+          this.editDept();
+        else
+          this.addDept();
         this.reset();
       }
     },
@@ -76,6 +78,26 @@ export default {
 
       return flag;
     },
+    getDept() {
+      this.$http.get(this.globalURL + '/api/depts/' + this.$route.params.id)
+        .then(res => {
+          console.log(res)
+          if (res.status == 200) {
+            this.dzial = res.body[0];
+          } else {
+            this.alert = {
+              success: false,
+              message: 'Bład SQL: ' + res.status
+            }
+          }
+        })
+        .catch(err => {
+          this.alert = {
+            success: false,
+            message: 'Bład podczas połączenia z bazą danych'
+          }
+        });
+    },
     addDept() {
       let {
         dzial
@@ -91,7 +113,33 @@ export default {
           } else {
             this.alert = {
               success: false,
-              message: 'Bład SQL:' + res.status
+              message: 'Bład SQL: ' + res.status
+            }
+          }
+        })
+        .catch(err => {
+          this.alert = {
+            success: false,
+            message: 'Bład podczas połączenia z bazą danych'
+          }
+        });
+    },
+    editDept() {
+      let {
+        dzial
+      } = this;
+
+      this.$http.put(this.globalURL + '/api/depts/' + this.$route.params.id, dzial)
+        .then(res => {
+          if (res.status == 200) {
+            this.alert = {
+              success: true,
+              message: 'Dział pomyślnie zaktualizowano'
+            };
+          } else {
+            this.alert = {
+              success: false,
+              message: 'Bład SQL: ' + res.status
             }
           }
         })
@@ -105,8 +153,12 @@ export default {
     reset() {
       for (let prop in this.dzial) {
         this.dzial[prop] = '';
+        this.$set(this.errors, prop);
       }
     }
+  },
+  mounted() {
+    if (this.$route.params.id) this.getDept();
   }
 }
 </script>

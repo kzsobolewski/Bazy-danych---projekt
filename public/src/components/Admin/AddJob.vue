@@ -33,7 +33,7 @@
         <div class="field">
           <label class="label">Godziny Pracy</label>
           <div class="select" :class="{'is-danger' : errors.godz_rozpoczecia_naliczania_oplaty}">
-            <datepicker v-model="job.godz_rozpoczecia_naliczania_oplaty" :config="{language, enableTime: true,
+            <datepicker :class="{'is-danger' : errors.godz_rozpoczecia_naliczania_oplaty}" v-model="job.godz_rozpoczecia_naliczania_oplaty" :config="{language, enableTime: true,
               noCalendar: true,
               dateFormat: 'H:i',
               time_24hr: true,
@@ -43,7 +43,7 @@
             </datepicker>
           </div>
           <div class="select" :class="{'is-danger' : errors.godz_rozpoczecia_naliczania_oplaty}">
-            <datepicker v-model="job.godz_zakonczenia_naliczania_oplaty" :config="{language, enableTime: true,
+            <datepicker :class="{'is-danger' : errors.godz_rozpoczecia_naliczania_oplaty}" v-model="job.godz_zakonczenia_naliczania_oplaty" :config="{language, enableTime: true,
               noCalendar: true,
               dateFormat: 'H:i',
               time_24hr: true,
@@ -67,10 +67,10 @@
               zł
             </a>
           </div>
-          <p v-if="errors.stawka_godz" class="help is-danger">
-            {{errors.stawka_godz}}
-          </p>
         </div>
+        <p v-if="errors.stawka_godz" class="help is-danger block">
+          {{errors.stawka_godz}}
+        </p>
 
         <div class="field is-grouped">
           <p class="control">
@@ -139,7 +139,10 @@ export default {
     },
     submit() {
       if (this.validate()) {
-        this.addJob();
+        if (this.$route.params.id)
+          this.updateJob();
+        else
+          this.addJob();
         this.reset();
       }
     },
@@ -152,7 +155,6 @@ export default {
     validate() {
       var flag = true;
       let {
-        errors,
         job
       } = this;
 
@@ -161,19 +163,19 @@ export default {
       // Validation
       if (job.nazwa_stanowiska.length == 0) {
         flag = false;
-        this.$set(errors, 'nazwa_stanowiska', 'Proszę podać nazwę.');
+        this.$set(this.errors, 'nazwa_stanowiska', 'Proszę podać nazwę.');
       }
-      if (job.godz_rozpoczecia_naliczania_oplaty.length == 0 || job.godz_zakonczenia_naliczania_oplaty.length == 0) {
+      if (job.godz_rozpoczecia_naliczania_oplaty === job.godz_zakonczenia_naliczania_oplaty) {
         flag = false;
-        this.$set(errors, 'godz_rozpoczecia_naliczania_oplaty', 'Proszę podać godziny pracy');
+        this.$set(this.errors, 'godz_rozpoczecia_naliczania_oplaty', 'Proszę podać poprawne godziny pracy');
       }
       if (job.stawka_godz.length == 0) {
         flag = false;
-        this.$set(errors, 'stawka_godz', 'Proszę podać stawkę za godzinę.');
+        this.$set(this.errors, 'stawka_godz', 'Proszę podać stawkę za godzinę.');
       }
       if (job.dzial_id.length == 0) {
         flag = false;
-        this.$set(errors, 'dzial_id', 'Proszę podać dział.');
+        this.$set(this.errors, 'dzial_id', 'Proszę podać dział.');
       }
 
       return flag;
@@ -204,6 +206,51 @@ export default {
           }
         });
     },
+    updateJob() {
+      let {
+        job
+      } = this;
+
+      this.$http.put(this.globalURL + '/api/jobs/' + this.$route.params.id, job)
+        .then(res => {
+          if (res.status == 200) {
+            this.alert = {
+              success: true,
+              message: 'Stanowisko zostało zaktualizowane'
+            };
+          } else {
+            this.alert = {
+              success: false,
+              message: 'Bład SQL: ' + res.status
+            }
+          }
+        })
+        .catch(err => {
+          this.alert = {
+            success: false,
+            message: 'Błąd podczas połączenia z bazą danych'
+          }
+        });
+    },
+    getJob() {
+      this.$http.get(this.globalURL + '/api/jobs/' + this.$route.params.id)
+        .then(res => {
+          if (res.status == 200) {
+            this.job = res.body[0];
+          } else {
+            this.alert = {
+              success: false,
+              message: 'Bład SQL: ' + res.status
+            }
+          }
+        })
+        .catch(err => {
+          this.alert = {
+            success: false,
+            message: 'Błąd podczas połączenia z bazą danych'
+          }
+        });
+    },
     reset() {
       for (let prop in this.job) {
         this.job[prop] = '';
@@ -213,6 +260,8 @@ export default {
   },
   mounted() {
     this.getDepts();
+    if (this.$route.params.id)
+      this.getJob();
   }
 }
 </script>
