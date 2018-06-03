@@ -10,7 +10,10 @@ const router = express.Router();
 
 //Getting list of all records in Stanowiska table
 router.get('/', (req, res) => {
-  connection.query('SELECT * FROM Stanowiska', (err, result) => {
+  connection.query(`SELECT * FROM Stanowiska
+                    INNER JOIN Dzialy
+                    ON Stanowiska.dzial_id = Dzialy.dzial_id
+                    `, (err, result) => {
     if(err){
       console.log("[MySql] " + err);
       res.status(404);
@@ -22,7 +25,11 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  connection.query('SELECT * FROM Stanowiska WHERE stanowisko_id =?', req.params.id , (err, result) => {
+  connection.query(`SELECT * FROM Stanowiska
+                    INNER JOIN Dzialy
+                    ON Stanowiska.dzial_id = Dzialy.dzial_id
+                    WHERE stanowisko_id =?`
+                    , req.params.id , (err, result) => {
     if(err){
       console.log("[MySql] " + err);
       res.status(404);

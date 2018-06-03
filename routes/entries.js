@@ -8,7 +8,14 @@ const router = express.Router();
 
 
 router.get('/', (req, res) => {
-  connection.query('SELECT * FROM Odbicia', (err, result) => {
+  connection.query(`SELECT * FROM Odbicia
+                    INNER JOIN Pracownicy
+                    ON Odbicia.pracownik_id = Pracownicy.pracownik_id
+                    INNER JOIN Stanowiska
+                    ON Pracownicy.stanowisko_id = Stanowiska.stanowisko_id
+                    INNER JOIN Dzialy
+                    ON Stanowiska.dzial_id = Dzialy.dzial_id
+                    `, (err, result) => {
     if(err){
       console.log("[MySql] " + err);
       res.sendStatus(404);
@@ -20,7 +27,15 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  connection.query('SELECT * FROM Odbicia WHERE odbicie_id = ?', req.params.id , (err, result) => {
+  connection.query(`SELECT * FROM Odbicia
+                      INNER JOIN Pracownicy
+                    ON Odbicia.pracownik_id = Pracownicy.pracownik_id
+                      INNER JOIN Stanowiska
+                    ON Pracownicy.stanowisko_id = Stanowiska.stanowisko_id
+                      INNER JOIN Dzialy
+                    ON Stanowiska.dzial_id = Dzialy.dzial_id
+                      WHERE odbicie_id = ?
+                    `, req.params.id , (err, result) => {
     if(err){
       console.log("[MySql] " + err);
       res.sendStatus(404);
@@ -31,12 +46,50 @@ router.get('/:id', (req, res) => {
   });
 });
 
+// Gives list of entries of specific worker
+router.get('/workers/:id', (req, res) => {
+  connection.query(`SELECT * FROM Odbicia
+                      INNER JOIN Pracownicy
+                        ON Odbicia.pracownik_id = Pracownicy.pracownik_id
+                      INNER JOIN Stanowiska
+                        ON Pracownicy.stanowisko_id = Stanowiska.stanowisko_id
+                      INNER JOIN Dzialy
+                        ON Stanowiska.dzial_id = Dzialy.dzial_id
+                    WHERE Odbicia.pracownik_id = ?
+                    `,req.params.id , (err, result) => {
+    if(err){
+      console.log("[MySql] " + err);
+      res.sendStatus(404);
+    }else {
+      res.status(200);
+      res.json(result);
+    }
+  });
+});
+
+/*
+* POST status:
+* 201 - Created
+* 400 - Empty JSON - bad request
+* 409 - Conflict - SQL Error - Wrong json
+*
+**406 - if worker tries to get in or out 2 times in a row
+*/
 
 router.post('/', jsonParser,(req, res) => {
+  var badEntry= false;
   if (!req.body){
       res.sendStatus(400);
       return;
    }
+  connection.query("SELECT * FROM Odbicia WHERE pracownik_id = ? ORDER BY odbicie_id DESC LIMIT 1", req.body.pracownik_id, (err, result) =>{
+    if(result.length){
+      if(result[0].We_Wy == req.body.We_Wy)
+        badEntry = true;
+    }
+    // else if(req.body.We_Wy == "Wy")
+    //        badEntry == true;
+  });
   var datetime = new Date();
   datetime.setHours(datetime.getHours()+2);
   Object.assign( req.body, {godzina : datetime});
@@ -47,7 +100,10 @@ router.post('/', jsonParser,(req, res) => {
       return;
     }
     console.log("[MySql] Entry record added");
-    res.sendStatus(201);
+    if(badEntry)
+      res.sendStatus(406);
+    else
+      res.sendStatus(201);
   });
 });
 
