@@ -28,5 +28,6 @@ router.use('/workers', require('./workers') );
 router.use('/jobs', require('./jobs') );
 router.use('/depts', require('./depts') );
 router.use('/entries', require('./entries') );
+router.use('/payments', require('./payments') );
 
 module.exports = router;

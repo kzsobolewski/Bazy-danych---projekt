@@ -11,10 +11,10 @@ router.get('/', (req, res) => {
   connection.query('SELECT * FROM Dzialy', (err, result) => {
     if(err){
       console.log("[MySql] " + err);
-      res.status(404);
+      res.sendStatus(404);
     }else {
-      res.json(result);
       res.status(200);
+      res.json(result);
     }
   });
 });
