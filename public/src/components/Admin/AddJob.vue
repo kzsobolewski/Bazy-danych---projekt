@@ -180,12 +180,23 @@ export default {
 
       return flag;
     },
-    addJob() {
-      let {
-        job
-      } = this;
+    createJob() {
+      let job = {
+        dzial_id: null,
+        nazwa_stanowiska: null,
+        godz_rozpoczecia_naliczania_oplaty: null,
+        godz_zakonczenia_naliczania_oplaty: null,
+        stawka_godz: null
+      };
 
-      this.$http.post(this.globalURL + '/api/jobs', job)
+      for (let prop in job) {
+        job[prop] = this.job[prop];
+      }
+
+      return job;
+    },
+    addJob() {
+      this.$http.post(this.globalURL + '/api/jobs', this.createJob())
         .then(res => {
           if (res.status == 201) {
             this.alert = {
@@ -207,11 +218,7 @@ export default {
         });
     },
     updateJob() {
-      let {
-        job
-      } = this;
-
-      this.$http.put(this.globalURL + '/api/jobs/' + this.$route.params.id, job)
+      this.$http.put(this.globalURL + '/api/jobs/' + this.$route.params.id, this.createJob())
         .then(res => {
           if (res.status == 200) {
             this.alert = {

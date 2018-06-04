@@ -98,12 +98,13 @@ export default {
           }
         });
     },
+    createDept(){
+      let dept = {};
+        dept.nazwa = this.dzial.nazwa;
+      return dept;
+    },
     addDept() {
-      let {
-        dzial
-      } = this;
-
-      this.$http.post(this.globalURL + '/api/depts', dzial)
+      this.$http.post(this.globalURL + '/api/depts', this.createDept())
         .then(res => {
           if (res.status == 201) {
             this.alert = {
@@ -125,11 +126,7 @@ export default {
         });
     },
     editDept() {
-      let {
-        dzial
-      } = this;
-
-      this.$http.put(this.globalURL + '/api/depts/' + this.$route.params.id, dzial)
+      this.$http.put(this.globalURL + '/api/depts/' + this.$route.params.id, this.createDept())
         .then(res => {
           if (res.status == 200) {
             this.alert = {

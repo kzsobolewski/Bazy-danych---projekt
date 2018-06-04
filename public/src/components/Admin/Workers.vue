@@ -32,7 +32,7 @@
               <td>{{worker.data_urodzenia.slice(0,10)}}</td>
               <td v-if="worker.plec == 'm'">Mężczyzna</td>
                 <td v-else-if="worker.plec == 'k'">Kobieta</td>
-              <td v-if="jobs">{{getJobById(worker.stanowisko_id).nazwa_stanowiska}}</td>
+              <td>{{worker.nazwa_stanowiska}}</td>
               <td>
                 <router-link type="button" class="button is-info" :to="'workers/edit/' + worker.pracownik_id"> <fai icon="user-edit"/> </router-link>
               </td>
@@ -59,7 +59,6 @@ export default {
   data() {
     return {
       workers: [],
-      jobs: [],
       alert: {}
     }
   },
@@ -85,32 +84,6 @@ export default {
         };
       });
     },
-    getJobs() {
-      this.$http.get(this.globalURL + '/api/jobs')
-        .then(res => {
-          if (res.status == 200) {
-            this.jobs = res.body;
-          } else {
-            this.alert = {
-              success: false,
-              message: 'Nie udało się pobrać stanowisk z serwera'
-            };
-          }
-        })
-        .catch(err => {
-          this.alert = {
-            success: false,
-            message: 'Nie można połączyć się z bazą danych.'
-          };
-        });
-    },
-    getJobById(id) {
-      for (let job of this.jobs) {
-        if (job.stanowisko_id == id)
-          return job;
-      }
-      return false;
-    },
     deleteWorker(id) {
       this.$http.delete(this.globalURL + '/api/workers/' + id)
         .then(res => {
@@ -134,7 +107,6 @@ export default {
     }
   },
   mounted() {
-    this.getJobs();
     this.getWorkers();
   },
 }

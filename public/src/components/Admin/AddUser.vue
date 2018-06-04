@@ -186,13 +186,27 @@ export default {
           console.log(err);
         });
     },
+    createUser() {
+      let user = {
+        imie: '',
+        nazwisko: '',
+        plec: 'm',
+        stanowisko_id: '',
+        data_urodzenia: ''
+      };
+
+      for (let prop in user) {
+        user[prop] = this.user[prop];
+      }
+
+      return user;
+    },
     addUser() {
       let {
         alert,
-        user
-      } = this.$data;
+      } = this;
 
-      this.$http.post(this.globalURL + '/api/workers', user)
+      this.$http.post(this.globalURL + '/api/workers', this.createUser())
         .then(res => {
           if (res.status == 201) {
             this.alert = {
@@ -216,8 +230,9 @@ export default {
     updateUser() {
       let {
         alert,
-        user
-      } = this.$data;
+      } = this;
+
+      let user = this.createUser();
 
       if (user.data_dodania)
         user.data_dodania = user.data_dodania.slice(0, 10);

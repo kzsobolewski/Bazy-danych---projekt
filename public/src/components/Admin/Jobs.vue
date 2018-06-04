@@ -27,7 +27,7 @@
               <td>{{job.nazwa_stanowiska}}</td>
               <td>{{job.godz_rozpoczecia_naliczania_oplaty.slice(0,5)}} - {{job.godz_zakonczenia_naliczania_oplaty.slice(0,5)}}</td>
               <td>{{job.stawka_godz}}</td>
-              <td>{{job.dzial_id}}</td>
+              <td>{{job.nazwa}}</td>
               <td>
                 <router-link type="button" class="button is-info" :to="'jobs/edit/' + job.stanowisko_id"> <fai icon="user-edit"/> </router-link>
               </td>

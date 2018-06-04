@@ -33,9 +33,20 @@
       </div>
     </div>
   </div>
+
   <div class="notification" :class="{'is-success':alert.success, 'is-danger':!alert.success}" v-if="alert.message">
     {{alert.message}}
   </div>
+
+  <div v-if="modal.message" class="modal" :class="{'is-active':modal.isOpen}">
+   <div class="modal-background"></div>
+   <div class="modal-content">
+     <div class="notification is-danger">
+        <button class="delete" @click="closeModal"></button>
+        {{modal.message}}
+     </div>
+   </div>
+ </div>
 </div>
 </template>
 
@@ -47,7 +58,8 @@ export default {
   data() {
     return {
       workers: [],
-      alert: {}
+      alert: {},
+      modal: {isOpen: false,message:null}
     }
   },
   components: {
@@ -73,10 +85,51 @@ export default {
       });
     },
     enter(id) {
-      console.log(id);
+      this.$http.post(this.globalURL + '/api/entries', {
+          We_Wy: "We",
+          pracownik_id: id
+        })
+        .then(res => {
+          if(res.status == 201){
+            this.alert = {
+              success: true,
+              message: 'Przyjęto akcję. Miłej pracy.'
+            };
+          }
+        })
+        .catch(err => {
+          if(err.status == 406){
+            this.openModal(`Wystąpił błąd podczas wchodzenia (powielona akcja), skontaktuj się z administatorem.`);
+          }
+        });
     },
-    leave(id){
-      console.log(id);
+    leave(id) {
+      this.$http.post(this.globalURL + '/api/entries', {
+          We_Wy: "Wy",
+          pracownik_id: id
+        })
+        .then(res => {
+          if(res.status == 201){
+            this.alert = {
+              success: true,
+              message: 'Przyjęto akcję. Miłego dnia.'
+            };
+          }
+        })
+        .catch(err => {
+          if(err.status == 406){
+            this.openModal(`Wystąpił błąd podczas wychodzenia (powielona akcja), skontaktuj się z administatorem.`);
+          }
+        });
+    },
+    openModal(msg){
+      this.modal.isOpen = true;
+      this.modal.message = msg;
+      this.alert = {};
+    },
+    closeModal(){
+      this.modal.isOpen = false;
+      this.modal.message = null;
     }
   },
   mounted() {
