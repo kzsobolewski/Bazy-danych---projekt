@@ -83,12 +83,17 @@ router.post('/', jsonParser,(req, res) => {
       return;
    }
   connection.query("SELECT * FROM Odbicia WHERE pracownik_id = ? ORDER BY odbicie_id DESC LIMIT 1", req.body.pracownik_id, (err, result) =>{
+    if(err){
+      console.log("[MySql] error: ", err );
+      res.sendStatus(409);
+      return;
+    }
     if(result.length){
       if(result[0].We_Wy == req.body.We_Wy)
         badEntry = true;
     }
-    // else if(req.body.We_Wy == "Wy")
-    //        badEntry == true;
+     else if(req.body.We_Wy == "Wy")
+            badEntry == true;
   });
   var datetime = new Date();
   datetime.setHours(datetime.getHours()+2);
