@@ -96,13 +96,13 @@ async function getWorkedHours(pracownik_id) {
         });
       }
 
-      // TODO: repair 
+      // TODO: repair
       if (inHour < acceptableInHour)
         inHour = acceptableInHour;
       if (outHour > acceptableOutHour)
         outHour = acceptableOutHour;
-
-      przepracowaneGodziny += Math.abs(outHour - inHour);
+      if (inHour < outHour)
+        przepracowaneGodziny += outHour - inHour;
     }
 
     przepracowaneGodziny = parseInt(przepracowaneGodziny);
