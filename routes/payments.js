@@ -1,22 +1,20 @@
 const express = require('express');
-const mysql = require('mysql');
+const mysql = require('promise-mysql');
 const mySqlConfig = require('../mySqlConfig');
-var connection = mysql.createConnection(mySqlConfig);
+var connection = null;
 var bodyParser = require('body-parser');
 var jsonParser = bodyParser.json();
 const router = express.Router();
 
+async function connect() {
+  connection = await mysql.createConnection(mySqlConfig);
+};
 
+connect();
 
-router.get('/:id', (req, res) => {
-    connection.query(`SELECT DISTINCT pracownik_id FROM Odbicia`, (err, result) => {
-      if (err){
-         console.log("[MySql] Error : " + err);
-         return;
-      }
-
-      worker_id = req.params.id;
-      connection.query(`SELECT Odbicia.pracownik_id ,
+async function getWorkedHours(pracownik_id) {
+  try {
+    var result = await connection.query(`SELECT Odbicia.pracownik_id ,
                         We_Wy ,
                         godzina,
                         godz_rozpoczecia_naliczania_oplaty,
@@ -34,85 +32,114 @@ router.get('/:id', (req, res) => {
                         INNER JOIN Dzialy
                         ON Stanowiska.dzial_id = Dzialy.dzial_id
                         WHERE Odbicia.pracownik_id = ?
-                        `
-                      , worker_id, (err, result) => {
+                    `, pracownik_id);
 
-                 var przepracowaneGodziny = 0;
-                 var naleznosc = 0;
-                 var czyPoprawne = true;
-                  if(err){
-                    console.log("MySql: [Error]", err);
-                    res.sendStatus(409);
-                    return;
-                  }
-                  // Validation of entries
-                  console.log("ilosc rekordow: ", result.length);
-                  if(result.length>=1){
-                    if(result[0].We_Wy == "Wy")
-                      czyPoprawne == false;
-                    for(var i = 1; i < result.length;i++){
-                      if(result[i].We_Wy == result[i-1].We_Wy)
-                        czyPoprawne = false;
-                    }
-                    console.log("czyPoprawne: ", czyPoprawne);
-                    if(czyPoprawne){
-                        const acceptableInHour =
-                                Number(JSON.stringify(result[0].godz_rozpoczecia_naliczania_oplaty).slice(1,3)) +
-                                Number(JSON.stringify(result[0].godz_rozpoczecia_naliczania_oplaty).slice(4,6))/60;
-                        const acceptableOutHour =
-                                Number(JSON.stringify(result[0].godz_zakonczenia_naliczania_oplaty).slice(1,3)) +
-                                Number(JSON.stringify(result[0].godz_rozpoczecia_naliczania_oplaty).slice(4,6))/60;
-                        console.log("start" , acceptableInHour);
-                        console.log("koniec" , acceptableOutHour);
+    let returnObject = {
+      pracownik_id,
+      imie: result[0].imie,
+      nazwisko: result[0].nazwisko,
+      nazwa_stanowiska: result[0].nazwa_stanowiska,
+      stawka_godz: result[0].stawka_godz
+    };
 
+    // Validation of entries
+    if (result.lenght == 0) {
+      console.error('Brak Odbić!');
+      return Object.assign(returnObject, {
+        czyPoprawne: false,
+      });
+    }
 
-                        for(var i = 0; i < result.length - 1; i += 2){
-                            var inHour = Number(JSON.stringify(result[i].godzina).slice(12,14)) +
-                                         Number(JSON.stringify(result[i].godzina).slice(15,17))/60;
-                            var outHour= Number(JSON.stringify(result[i+1].godzina).slice(12,14)) +
-                                         Number(JSON.stringify(result[i+1].godzina).slice(15,17))/60;
-                            console.log("inHour: " + inHour);
-                            console.log("outHour: " + outHour);
-                            if(inHour > outHour)
-                              czyPoprawne = false;
-                            else {
-                              if(inHour < acceptableInHour)
-                                  inHour = acceptableInHour;
-                              if(outHour > acceptableOutHour)
-                                  outHour = acceptableOutHour;
-                              if(inHour > outHour)
-                                  czyPoprawne = false;
-                              console.log("inHour: +margin " + inHour);
-                              console.log("outHour: +margin " + outHour);
-                              przepracowaneGodziny += outHour - inHour;
-                            } // security case - hours are good
-                        } // end of every day loop
-                        naleznosc = przepracowaneGodziny * Number(result[0].stawka_godz ) ;
-                        //console.log("godziny: "+przepracowaneGodziny);
-                        //console.log("kasa: " +naleznosc);
-                        console.log("godziny: "+ przepracowaneGodziny);
-                        console.log("kasa: " + naleznosc);
-                    } // end of Validation
-                    var Obj = {
-                      "pracownik_id" : worker_id,
-                      "imie" : result[0].imie,
-                      "nazwisko" : result[0].nazwisko,
-                      "nazwa_stanowskia" : result[0].nazwa_stanowiska,
-                      "nazwa_dzialu" : result[0].nazwa,
-                      "poprawnosc_wejsc" : czyPoprawne,
-                      "przepracowaneGodziny":przepracowaneGodziny,
-                      "naleznosc" : naleznosc,
-                      "stawka_godz" : result[0].stawka_godz }
-                      res.status(200);
-                      res.json(Obj);
-                      return;
-                } // end of case when lenght > 2
-                res.sendStatus(404);
-              });
+    if (result[0].We_Wy == "Wy") {
+      console.error('Pierwsze odbicie nie powinno być wyjsciem');
+      return Object.assign(returnObject, {
+        czyPoprawne: false,
+      });
+    }
+
+    for (var i = 1; i < result.length; i++) {
+      if (result[i].We_Wy == result[i - 1].We_Wy) {
+        console.error('Dwie takie same akcje!');
+        return Object.assign(returnObject, {
+          czyPoprawne: false,
+        });
+      }
+    }
+
+    //console.log('Sukces dla ID: ' + +result[0].pracownik_id)
+
+    var przepracowaneGodziny = 0;
+
+    // Counting
+    const acceptableInHour =
+      Number(JSON.stringify(result[0].godz_rozpoczecia_naliczania_oplaty).slice(1, 3)) +
+      Number(JSON.stringify(result[0].godz_rozpoczecia_naliczania_oplaty).slice(4, 6)) / 60;
+
+    const acceptableOutHour =
+      Number(JSON.stringify(result[0].godz_zakonczenia_naliczania_oplaty).slice(1, 3)) +
+      Number(JSON.stringify(result[0].godz_rozpoczecia_naliczania_oplaty).slice(4, 6)) / 60;
+
+    //console.log("Start: " + acceptableInHour);
+    //console.log("Koniec: " + acceptableOutHour);
+
+    for (var i = 0; i < result.length - 1; i += 2) {
+      var inHour = Number(JSON.stringify(result[i].godzina).slice(12, 14)) +
+        Number(JSON.stringify(result[i].godzina).slice(15, 17)) / 60;
+      var outHour = Number(JSON.stringify(result[i + 1].godzina).slice(12, 14)) +
+        Number(JSON.stringify(result[i + 1].godzina).slice(15, 17)) / 60;
+      //console.log("inHour: " + inHour);
+      //console.log("outHour: " + outHour);
+      if (inHour > outHour) {
+        console.log('Wejscie nie moze byc pozniej od wyjscia!');
+        return Object.assign(returnObject, {
+          czyPoprawne: false,
+        });
+      }
+
+      if (inHour < acceptableInHour)
+        inHour = acceptableInHour;
+      if (outHour > acceptableOutHour)
+        outHour = acceptableOutHour;
+
+      przepracowaneGodziny += outHour - inHour;
+    }
+
+    przepracowaneGodziny = parseInt(przepracowaneGodziny);
+    var naleznosc = parseInt(przepracowaneGodziny * Number(result[0].stawka_godz));
+
+    return Object.assign(returnObject, {
+      czyPoprawne: true,
+      przepracowaneGodziny,
+      naleznosc
     });
+
+  } catch (e) {
+    console.error(e);
+  }
+
+}
+
+router.get('/', async (req, res) => {
+  try {
+    var ids = await connection.query(`SELECT DISTINCT pracownik_id FROM Odbicia`);
+    let data = [];
+    for (let id of ids) {
+      data.push(await getWorkedHours(id.pracownik_id));
+    };
+    res.status(200).json(data);
+  } catch (e) {
+    res.sendStatus(409);
+  }
 });
 
-
+router.get('/:id', async (req, res) => {
+  try {
+    let data = await getWorkedHours(req.params.id)
+    res.status(200).json(data);
+  } catch (e) {
+    res.sendStatus(409);
+  }
+});
 
 
 module.exports = router;
