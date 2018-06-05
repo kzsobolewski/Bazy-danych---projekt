@@ -10,9 +10,6 @@
         <a href="https://github.com/lgogol">Łukasz Gogół</a>
         <br>
       </h2>
-      <h3 class="subtitle is-4">
-        <a href="https://github.com/Karol-Waliszewski">Karol Waliszewski</a>
-      </h3>
       <router-link class="button" to="/admin">Admin</router-link>
       <router-link class="button" to="/worker">Pracownik</router-link>
     </div>

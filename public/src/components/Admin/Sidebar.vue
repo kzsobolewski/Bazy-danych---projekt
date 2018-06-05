@@ -5,9 +5,8 @@
         Główne
       </p>
       <ul class="menu-list">
-        <li><router-link to="/admin" exact><span class="icon"><fai icon="chart-bar"/></span> Statystyki</router-link></li>
+        <li><router-link to="/admin" exact><span class="icon"><fai icon="money-bill-wave"/></span> Wypłaty</router-link></li>
         <li><router-link to="/admin/entries" exact><span class="icon"><fai icon="sign-in-alt"/></span> Wejścia</router-link></li>
-        <li><router-link to="/admin/payments" exact><span class="icon"><fai icon="money-bill-wave"/></span> Wypłaty</router-link></li>
       </ul>
       <p class="menu-label">
         Pracownicy

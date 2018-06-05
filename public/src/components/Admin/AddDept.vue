@@ -3,7 +3,7 @@
   <div class="card">
     <header class="card-header">
       <p class="card-header-title">
-        Dodaj Stanowisko
+        Dodaj Dział
       </p>
     </header>
     <div class="card-content">

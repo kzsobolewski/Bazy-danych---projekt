@@ -18,7 +18,6 @@ import Worker from './Worker.vue'
 
 // Sub routes
 // ----- ADMIN
-import stats from './components/Admin/Stats.vue'
 import workers_add from './components/Admin/AddUser.vue'
 import workers from './components/Admin/Workers.vue'
 import depts from './components/Admin/Departments.vue'
@@ -46,7 +45,7 @@ const routes = [{
   component: Admin,
   children: [{
       path: '',
-      component: stats
+      component: payments
     },
     {
       path: 'jobs',
@@ -83,10 +82,6 @@ const routes = [{
     {
       path: 'workers/edit/:id',
       component: workers_add
-    },
-    {
-      path: 'payments',
-      component: payments
     },
     {
       path: 'entries',

@@ -101,9 +101,6 @@ export default {
             message: 'Nie można połączyć się z bazą danych.'
           };
         });
-    },
-    enterEdit(id) {
-      this.$emit('edit-user', id);
     }
   },
   mounted() {
