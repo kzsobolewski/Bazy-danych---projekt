@@ -79,8 +79,8 @@ async function getWorkedHours(pracownik_id) {
       Number(JSON.stringify(result[0].godz_zakonczenia_naliczania_oplaty).slice(1, 3)) +
       Number(JSON.stringify(result[0].godz_rozpoczecia_naliczania_oplaty).slice(4, 6)) / 60;
 
-    //console.log("Start: " + acceptableInHour);
-    //console.log("Koniec: " + acceptableOutHour);
+    console.log("Start: " + acceptableInHour);
+    console.log("Koniec: " + acceptableOutHour);
 
     for (var i = 0; i < result.length - 1; i += 2) {
       var inHour = Number(JSON.stringify(result[i].godzina).slice(12, 14)) +
@@ -96,12 +96,13 @@ async function getWorkedHours(pracownik_id) {
         });
       }
 
+      // TODO: repair 
       if (inHour < acceptableInHour)
         inHour = acceptableInHour;
       if (outHour > acceptableOutHour)
         outHour = acceptableOutHour;
 
-      przepracowaneGodziny += outHour - inHour;
+      przepracowaneGodziny += Math.abs(outHour - inHour);
     }
 
     przepracowaneGodziny = parseInt(przepracowaneGodziny);
