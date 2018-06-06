@@ -137,7 +137,8 @@ export default {
           };
         });
     },
-    submit() {
+    submit(e) {
+      e.preventDefault();
       if (this.validate()) {
         if (this.$route.params.id)
           this.updateJob();
@@ -258,7 +259,8 @@ export default {
           }
         });
     },
-    reset() {
+    reset(e) {
+      e.preventDefault();
       for (let prop in this.job) {
         this.job[prop] = '';
       }

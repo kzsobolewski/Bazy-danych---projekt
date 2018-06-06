@@ -114,7 +114,8 @@ export default {
     Datepicker
   },
   methods: {
-    submit() {
+    submit(e) {
+      e.preventDefault();
       if (this.validate()) {
         if (this.$route.params.id)
           this.updateUser();
@@ -258,7 +259,8 @@ export default {
           }
         });
     },
-    reset() {
+    reset(e) {
+      e.preventDefault();
       let {
         user
       } = this;

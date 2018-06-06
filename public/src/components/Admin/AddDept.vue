@@ -54,7 +54,8 @@ export default {
     }
   },
   methods: {
-    submit() {
+    submit(e) {
+      e.preventDefault();
       if (this.validate()) {
         if (this.$route.params.id)
           this.editDept();
@@ -147,7 +148,8 @@ export default {
           }
         });
     },
-    reset() {
+    reset(e) {
+      e.preventDefault();
       for (let prop in this.dzial) {
         this.dzial[prop] = '';
         this.$set(this.errors, prop);
