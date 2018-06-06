@@ -26,6 +26,7 @@
             <tr>
               <th>Imię</th>
               <th>Nazwisko</th>
+              <th>Godzina</th>
               <th>Akcja</th>
               <th>Napraw</th>
             </tr>
@@ -34,6 +35,7 @@
             <tr v-for="(entry,index) in entries" v-if="entryFilter == '' || entry.pracownik_id == entryFilter">
               <td>{{entry.imie}}</td>
               <td>{{entry.nazwisko}}</td>
+              <td>{{entry.godzina.slice(entry.godzina.indexOf(':') - 2,19)}}</td>
               <td v-if="entry.We_Wy == 'We'">
                 <button type="button" class="button is-success" disabled> <fai icon="sign-in-alt"/> </button>
               </td>
